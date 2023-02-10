@@ -12,10 +12,12 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <title>Portafolio Christian</title>
 </head>
 <body>
+    <div id="particles-js"></div>
+
     <!-- Secciòn INICIO -->
     <span class="sombra">
         <section id="inicio" class="inicio">
@@ -44,25 +46,34 @@
                     </div>
                 </header>
     
-                <div class="fila">
-                    <div class="col">
-                        <h2>Desarrollador Junior</h2>
-                        <h3>Ingeniero Informatico</h3>
-                        <p></p>
-                        <button class="btn btn-1"><a href="CV_ChristianSilva.pdf" download style="color: white;">Descargar CV</a></button>
-                    </div>
+                
+            </div>
+            <div class="content">
+                <div class="content__container">
+                    <p class="content__container__text">
+                        Hola
+                    </p>
+                    <ul class="content__container__list">
+                        <li class="content__container__list__item">Mundo !</li>
+                        <li class="content__container__list__item">Christian !</li>
+                        <li class="content__container__list__item">Usuarios !</li>
+                        <li class="content__container__list__item">A Todos !</li>
+                    </ul>
                     
-                    <div class="col">
-                        <div class="contenedor-img">
-                            <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/yomismo-removebg-preview.png" alt="" width="300" height="300">
-                            
-                        </div>
+                    <button class="btn btn-1"><a href="CV_ChristianSilva.pdf" download style="color: white;">Descargar CV</a></button>
+                </div>
+                
+                <div class="col">
+                    
+                        <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/yomismo-removebg-preview.png" alt="" width="350" height="350">
                         
-                    </div>
+                    
                     
                 </div>
+                
             </div>
         </section>
+        
     </span>
 
 
@@ -74,7 +85,7 @@
 
         <div class="galeria">
             <div class="item disenio">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/logochristian.png" alt="">
+                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/logochristiandev-removebg-preview.png" alt="">
                 
                 <div class="info">
                     <h3>Portafolio WEB</h3>
@@ -323,12 +334,12 @@
 
                     </div>
                 </div>
-                <div class="col">
+                <div class="cont">
                     <form action="https://formsubmit.co/silvanegrete.ch@gmail.com" class="formulario_contacto" method="POST">
                         <input type="text" name="name" placeholder="Nombre..." required>
                         <input type="email" name="email" placeholder="Correo..." required>
                         <input type="text" name="mensaje" placeholder="Mensaje" required>
-                        <button type="submit" class="btn">Enviar</button>
+                        <button type="submit" class="btn"><span>Enviar</span><img src="https://i.cloudup.com/2ZAX3hVsBE-3000x3000.png" height="62" width="62"></button>
                         <input type="hidden" name="_next" value="https://christian-devsam.github.io/myPortfolioChristianDev/">
                         <input type="hidden" name="_captcha" value="false">
                     </form>
@@ -348,5 +359,8 @@
           </div>
     </footer>
 
+    <!-- JS PARTICULES.JS-->
+    <script src="js/particles.min.js"></script>
+    <script src="js/fondo.js"></script>
 </body>
 </html>
