@@ -80,6 +80,9 @@ html{
     font-size: 35px;
     line-height: 40px;
     color: #ecf0f1;
+    max-width: 1100px;
+    margin-top: 0px;
+    
 }
 .content__container {
     font-weight: 600;
@@ -314,17 +317,20 @@ html{
     width: 100%;
     height: auto;
 }
-.inicio .content .col button{
+.inicio .contenido .btn {
     background: none;
-    width: fit-content;
-    padding: 5px 40px;
+    width: 180px;
+    height: 40px;
+    padding: 5px;
     border: 2px solid #ff5b00;
     color: #fff;
     background:linear-gradient(to right, #ff5b00, #ff9900);
     transition: .5s;
     cursor: pointer;
+    text-align: center;
+    
 }
-.inicio .content .col button:hover{
+.inicio .contenido button:hover{
     transform: scale(1.1);
 }
 #icono-nav{
@@ -713,7 +719,7 @@ html{
     height: 50px;
     /*border-radius*/
     border-radius: 100px;
-    background: rgb(1, 93, 116);
+    background:linear-gradient(to right, #1CA15E, #1CA18D);
     position: absolute;
     border: 5px solid #f1f3f1;
     margin: auto;
