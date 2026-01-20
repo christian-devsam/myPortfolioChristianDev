@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from pypdf import PdfReader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -109,3 +109,4 @@ if "process_complete" in st.session_state:
                 except Exception as e:
 
                     st.error("Ocurrió un error al procesar la respuesta.")
+
