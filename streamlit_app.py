@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
@@ -107,4 +107,5 @@ if "process_complete" in st.session_state:
                     st.write(ai_response)
                     st.session_state.messages.append({"role": "assistant", "content": ai_response})
                 except Exception as e:
+
                     st.error("Ocurrió un error al procesar la respuesta.")
