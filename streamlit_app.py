@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
@@ -31,7 +30,7 @@ except FileNotFoundError:
     st.error("⚠️ No se encontró la API Key. Configura los 'Secrets' en Streamlit Cloud.")
     st.stop()
 
-# --- FUNCIONES OPTIMIZADAS (CON CACHÉ) ---
+# --- FUNCIONES ---
 
 @st.cache_resource
 def load_and_process_pdf(pdf_path):
@@ -42,16 +41,27 @@ def load_and_process_pdf(pdf_path):
         for page in pdf_reader.pages:
             text += page.extract_text()
     except FileNotFoundError:
+        st.error("No se encontró el archivo PDF.")
         return None
     
-    # 2. Partir texto (Trozos más pequeños para evitar error 504)
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    # 2. Partir texto (Trozos más pequeños = Menos errores de Timeout)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
     chunks = text_splitter.split_text(text)
     
-    # 3. Crear Vector Store (Embeddings)
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
-    vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
-    return vectorstore
+    if not chunks:
+        return None
+
+    # 3. Crear Vector Store (USANDO EL NUEVO MODELO 004)
+    try:
+        embeddings = GoogleGenerativeAIEmbeddings(
+            model="models/text-embedding-004", 
+            google_api_key=api_key
+        )
+        vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
+        return vectorstore
+    except Exception as e:
+        st.error(f"Error al conectar con Google Embeddings: {e}")
+        return None
 
 def get_conversation_chain(vectorstore):
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key, temperature=0.3)
@@ -66,15 +76,14 @@ def get_conversation_chain(vectorstore):
 # --- PROCESAMIENTO INICIAL ---
 
 if "conversation" not in st.session_state:
-    with st.spinner("Inicializando conocimientos de Christian..."):
-        # Cargamos el PDF usando la función con caché (solo lo hace una vez)
+    with st.spinner("Cargando CV y conectando con Gemini..."):
         vectorstore = load_and_process_pdf("cv_csilva.pdf")
         
         if vectorstore:
             st.session_state.conversation = get_conversation_chain(vectorstore)
             st.session_state.process_complete = True
         else:
-            st.error("❌ No se encontró el archivo 'cv_csilva.pdf'. Súbelo al repo.")
+            st.warning("No se pudo procesar el PDF o falló la conexión con la API.")
 
 # --- INTERFAZ DE CHAT ---
 
