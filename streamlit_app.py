@@ -22,67 +22,59 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("✨ Asistente IA de Christian Silva")
-st.write("Potenciado por **Google Gemini**. Pregúntame sobre mi experiencia y proyectos.")
+st.write("Pregúntame sobre mi experiencia y proyectos.")
 
-with st.sidebar:
-    st.header("Sobre este Chatbot")
-    st.info("Esta IA ha leído mi CV y puede responder preguntas sobre mi perfil profesional.")
-    st.divider()
-    st.write("📧 silvanegrete.ch@gmail.com")
-    st.markdown("[Ver código fuente en GitHub](https://github.com/christian-devsam/myPortfolioChristianDev)")
-
-
+# --- GESTIÓN DE LA API KEY ---
 try:
     api_key = st.secrets["GOOGLE_API_KEY"]
 except FileNotFoundError:
     st.error("⚠️ No se encontró la API Key. Configura los 'Secrets' en Streamlit Cloud.")
     st.stop()
 
-# --- FUNCIONES ---
+# --- FUNCIONES OPTIMIZADAS (CON CACHÉ) ---
 
-def get_pdf_text(pdf_path):
+@st.cache_resource
+def load_and_process_pdf(pdf_path):
+    # 1. Leer el PDF
     text = ""
     try:
         pdf_reader = PdfReader(pdf_path)
         for page in pdf_reader.pages:
             text += page.extract_text()
     except FileNotFoundError:
-        st.error(f"No se encontró el archivo {pdf_path}. Asegúrate de subirlo al repo.")
-    return text
-
-def get_text_chunks(text):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
+        return None
+    
+    # 2. Partir texto (Trozos más pequeños para evitar error 504)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = text_splitter.split_text(text)
-    return chunks
-
-def get_vectorstore(text_chunks):
-    # Ya no pasamos la api_key como argumento manual, la toma del entorno
+    
+    # 3. Crear Vector Store (Embeddings)
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
-    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+    vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
     return vectorstore
 
 def get_conversation_chain(vectorstore):
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key, temperature=0.3)
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
-    conversation_chain = ConversationalRetrievalChain.from_llm(
+    chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
         memory=memory
     )
-    return conversation_chain
+    return chain
 
-# --- PROCESAMIENTO ---
+# --- PROCESAMIENTO INICIAL ---
 
 if "conversation" not in st.session_state:
     with st.spinner("Inicializando conocimientos de Christian..."):
-        try:
-            raw_text = get_pdf_text("cv_csilva.pdf")
-            text_chunks = get_text_chunks(raw_text)
-            vectorstore = get_vectorstore(text_chunks)
+        # Cargamos el PDF usando la función con caché (solo lo hace una vez)
+        vectorstore = load_and_process_pdf("cv_csilva.pdf")
+        
+        if vectorstore:
             st.session_state.conversation = get_conversation_chain(vectorstore)
             st.session_state.process_complete = True
-        except Exception as e:
-            st.error(f"Error al iniciar el bot: {e}")
+        else:
+            st.error("❌ No se encontró el archivo 'cv_csilva.pdf'. Súbelo al repo.")
 
 # --- INTERFAZ DE CHAT ---
 
@@ -107,7 +99,4 @@ if "process_complete" in st.session_state:
                     st.write(ai_response)
                     st.session_state.messages.append({"role": "assistant", "content": ai_response})
                 except Exception as e:
-
-                    st.error("Ocurrió un error al procesar la respuesta.")
-
-
+                    st.error(f"Error: {e}")
