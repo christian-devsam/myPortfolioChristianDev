@@ -1,378 +1,257 @@
-
 <!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.6/jquery.easypiechart.min.js" integrity="sha512-DHNepbIus9t4e6YoMBSJLwl+nnm0tIwMBonsQQ+W9NKN6gVVVbomJs9Ii3mQ+HzGZiU5FyJLdnAz9a63ZgZvTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.6/jquery.easypiechart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilo.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <title>Portafolio Christian</title>
+    <title>Christian Silva | Data Engineer</title>
 </head>
 <body>
     <div id="particles-js"></div>
 
-    <!-- Secciòn INICIO -->
-    <span class="sombra">
-        <section id="inicio" class="inicio">
-            <div class="contenido">
-                <header>
-                    <div class="logo">
-                        <svg viewBox="0 0 1000 200">
-                            <symbol id="s-text">
-                              <text text-anchor="middle" x="50%" y="80%">ChristianDEV</text>
-                            </symbol>
-                        
-                            <g class = "g-ants">
-                              <use xlink:href="#s-text" class="text-copy"></use>
-                              <use xlink:href="#s-text" class="text-copy"></use>
-                              <use xlink:href="#s-text" class="text-copy"></use>
-                              <use xlink:href="#s-text" class="text-copy"></use>
-                              <use xlink:href="#s-text" class="text-copy"></use>
-                            </g>
-                          </svg>
-                    </div>
-                    <nav id="nav" class="">
-                        <a href="#inicio">Inicio</a>
-                        <a href="#servicios">Habilidades</a>
-                        <a href="#trabajos">Trabajos</a>
-                        <a href="#contacto">Contacto</a>
-                        <button class="btn btn-white btn-animate"><a href="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/CVChristianSilva.pdf" download style="color: white; margin: -20px; display: grid;">Descargar CV</a></button>
-             
-                    </nav>
-                    
-                    <!-- Icono del menu responsive -->
-                    <div id="icono-nav" onclick="responsiveMenu()">
-                        <i class="fa-solid fa-bars"></i>
-                    </div>
-    
-                    <div class="redes">
-                        <a href="https://github.com/christian-devsam"><i class="fa-brands fa-github"></i></a>
-                        <a href="https://www.youtube.com/channel/UCWzUXRuhGZJ1X0-bw1y1UkQ"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="https://www.linkedin.com/in/christian-silva-negrete-26913a22b/"><i class="fa-brands fa fa-linkedin"></i></a>
-                    </div>
-                </header>
-    
-                
+    <section id="inicio" class="inicio">
+        <div class="contenido-banner">
+            <div class="contenedor-img">
+                <img src="img/tu_foto.jpg" alt="Christian Silva">
             </div>
-            <div class="content">
-                <div class="content__container">
-                    <p class="content__container__text">
-                        Hola
+            <h1>Christian Silva Negrete</h1>
+            <h2>Data Engineer | Automation & GenAI Specialist</h2>
+            <div class="redes">
+                <a href="https://linkedin.com/in/christian-silva-negrete-26913a22b/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://github.com/christian-devsam" target="_blank"><i class="fa-brands fa-github"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre-mi" class="sobre-mi">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Sobre Mí</h2>
+            
+            <div class="fila-sobre-mi">
+                <div class="col-texto">
+                    <p>
+                        Ingeniero en Informática con sólida experiencia en la construcción de <strong>Pipelines de Datos, ETL y Automatización Cloud</strong>. 
+                        Me especializo en transformar datos complejos en decisiones estratégicas utilizando <strong>Google Cloud Platform (BigQuery, Data Fusion)</strong> y Azure.
                     </p>
-                    <ul class="content__container__list">
-                        <li class="content__container__list__item">Mundo !</li>
-                        <li class="content__container__list__item">Christian !</li>
-                        <li class="content__container__list__item">Usuarios !</li>
-                        <li class="content__container__list__item">A Todos !</li>
-                    </ul>
-                    
-                       </div>
-                
-                <div class="col">
-                    
-                        <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/yomismo-removebg-preview.png" alt="" width="350" height="350">
-                        
-                    
-                    
+                    <p>
+                        Mi enfoque combina la ingeniería de datos tradicional con tecnologías emergentes. Actualmente, estoy integrando <strong>Inteligencia Artificial Generativa</strong> en flujos de negocio para crear soluciones de alto impacto y automatización inteligente.
+                    </p>
+                    <a href="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/CVChristianSilva.pdf" target="_blank" class="btn-cv">
+                        Descargar CV <i class="fa-solid fa-download"></i>
+                    </a>
                 </div>
-                
-            </div>
-        </section>
-        
-    </span>
 
-
-    <!-- sección trabajos -->
-    <section class="trabajos" id="trabajos">
-        <h2>Mis Trabajos</h2>
-
-        <p></p>
-
-        <div class="galeria">
-            <div class="item disenio">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/logochristiandev-removebg-preview.png" alt="">
-                
-                <div class="info">
-                    <h3>Portafolio WEB</h3>
-                    <span>html</span><span>css</span><span>javascript</span>
-                    <a href="https://christian-devsam.github.io/myPortfolioChristianDev/" >Ver Trabajo</a>
-                </div>
-            </div>
-            <div class="item disenio">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/logo-feria.png" alt="">
-                
-                <div class="info">
-                    <h3>Feria Virtual WEB</h3>
-                    <span>html</span><span>css</span><span>javascript</span><span>Python</span><span>Oracle</span>
-                    <a href="https://github.com/christian-devsam/FeriaVirtual">Ver Trabajo</a>
-                </div>
-            </div>
-            <div class="item programacion">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/logo-feria.png" alt="">
-                <h3></h3>
-                <div class="info">
-                    <h3>Feria Virtual APP ESCRITORIO</h3>
-                    <span>C#</span><span>Oracle</span><span>.NET framework</span>
-                    <a href="https://github.com/christian-devsam/Portafolio-feria">Ver Trabajo</a>
-                </div>
-            </div>
-            <div class="item animaciones">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/bluelogo.png" alt="">
-                <div class="info">
-                    <h3>Onbreak</h3>
-                    <span>C#</span><span>.NET framework</span><span>SQLServer</span>
-                    <a href="#" >Ver trabajo</a>
-                </div>
-            </div>
-            
-           
-            
-            
-            
-        </div>
-    </section>
-
-
-     <!-- sección SERVICIOS -->
-    <section id="servicios" class="servicios">
-        <h2>Mis Habilidades</h2>
-        <div class="fila">
-            <div class="col">
-                <div class="card">
-                    
-                    <div class="score">
-                        <div class="icono color1">
-                            <div class="circulo">
-                                <i class="fa-solid fa-code fa-lg"></i>
-                                
-                            </div>
+                <div class="col-badge">
+                    <div class="diplomado-badge">
+                        <div class="icono-ia">
+                            <i class="fa-solid fa-brain"></i>
                         </div>
-                        
-                            <div class="chart" data-percent="80">
-                                85%
-                            </div>
-                            <h3>HTML & CSS</h3>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="score">
-                        <div class="icono color2">
-                            <div class="circulo">
-                                <i class="fa-brands fa-bootstrap fa-lg" ></i>
-                                
-                            </div>
+                        <div class="texto-ia">
+                            <h4>Diplomado en IA Generativa</h4>
+                            <p>Pontificia Universidad Católica (PUC)</p>
+                            <small>Especialización en LLMs, RAG & Prompt Eng.</small>
                         </div>
-                        
-                            <div class="chart" data-percent="80">
-                                90%
-                            </div>
-                            <h3>Bootstrap</h3>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="score">
-                        <div class="icono color3">
-                            <div class="circulo">
-                                <i class="fa-brands fa-python fa-lg"></i>
-                                
-                            </div>
-                        </div>
-                        
-                            <div class="chart" data-percent="80">
-                                70%
-                            </div>
-                            <h3>PYTHON</h3>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="fila">
-            <div class="col">
-                <div class="card">
-                    <div class="score">
-                        <div class="icono color2">
-                            <div class="circulo">
-                                <i class="fa-solid fa-database fa-lg"></i>
-                                
-                            </div>
-                        </div>
-                        
-                            <div class="chart" data-percent="80">
-                                80%
-                            </div>
-                            <h3>SQL</h3>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    
-                    <div class="score">
-                        <div class="icono color1">
-                            <div class="circulo">
-                                <img src="https://cdn-icons-png.flaticon.com/512/906/906319.png" width="50" height="50" alt="Office application free icon" title="Office application free icon">
-
-                                
-                            </div>
-                        </div>
-                        
-                            <div class="chart" data-percent="80">
-                                90%
-                            </div>
-                            <h3>OFFICE</h3>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="score">
-                        <div class="icono color3">
-                            <div class="circulo">
-                                <img src="https://static-00.iconduck.com/assets.00/c-sharp-c-icon-456x512-9sej0lrz.png" width="50" height="50"   alt="C Sharp (C#)  icon" title="C Sharp (C#)  icon" data-alternate="https://d1rs1tqcxzgl1z.cloudfront.net/iconduck/image/upload/w_614,h_614,c_fit/f_png/e_colorize:0,co_rgb:000000/w_644,h_644,c_lpad/e_trim:1/w_512,h_512,c_fit/s3.prod/assets.00/asstny11kq30">                                
-                            </div>
-                        </div>
-                        
-                            <div class="chart" data-percent="80">
-                                80%
-                            </div>
-                            <h3>C#</h3>
-                        
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    
-
-    <!-- sección Certificados -->
-    <section class="trabajos1" id="trabajos1">
-        
-        <h2>Mis Certificados</h2>
-
-        <p></p>
-
-        <div class="galeria">
-            <div class="item disenio">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/certscrum.png" alt="">
-                
-                <div class="info">
-                    <h3>Scrum Foundation Professional - SFPC™</h3>
-                    <span>CertiProf</span>
-                    <a href="https://www.credly.com/badges/2249f77d-fcee-4b3a-a883-5b91c8f62c19/linked_in_profile" >Mostrar credencial</a>
-                </div>
-            </div>
-
-            <div class="item programacion">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/pythonsing-removebg-preview.png" alt="">
-                
-                <div class="info">
-                    <h3>Python for Data Science</h3>
-                    <span>SoloLearn</span>
-                    <a href="certpythonforadatascience.pdf" download >Mostrar credencial</a>
-                </div>
-            </div>
-            <div class="item animaciones">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/Captura de pantalla 2023-01-17 222749.png" alt="">
-                <div class="info">
-                    <h3>Aspectos básicos: Datos, datos, en todas partes</h3>
-                    <span>Coursera</span><span>Google</span>
-                    <a href="https://www.coursera.org/account/accomplishments/certificate/LCP3DZGRDY2D" >Mostrar credencial</a>
-                </div>
-            </div>
-            <div class="item programacion">
-                <img src="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/img/courseralogo.png" alt="">
-                <h3></h3>
-                <div class="info">
-                    <h3>SQL</h3>
-                    <span>SoloLearn</span>
-                    <a href="https://www.sololearn.com/Certificate/CT-J21CSL95/png">Mostrar credencial</a>
-                </div>
-            </div>
+    <section class="skills" id="skills">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Stack Tecnológico</h2>
+            <h3>Arquitectura de Datos & Cloud</h3>
             
-            
-           
-            
-            
-            
-        </div>
-    </section>
-
-
-
-    <!-- sección contacto -->
-    <section class="contacto" id="contacto">
-        <div class="contenedor-contacto">
-            <h2>Contacto</h2>
             <div class="fila">
                 <div class="col">
-                    <div class="info">
-                        <h3>Email:</h3>
-                        <p>silvanegrete.ch@gmail.com</p>
-                    </div>
-                    <div class="info">
-                        <h3>Teléfono:</h3>
-                        <p>+56 9 3291 2047</p>
-                    </div>
-                    <div class="info">
-                        <h3>País</h3>
-                        <p>Chile</p>
-                    </div>
-                    <div class="info">
-                        <h3>Ciudad:</h3>
-                        <p>Santiago</p>
-                    </div>
-                    <div class="info">
-                        <h3>Redes: </h3>
-                        <a href="https://github.com/christian-devsam" style="color: black; margin: auto;"><i class="fa-brands fa-github fa-3x" ></i></a>
-                        <a href="https://www.youtube.com/channel/UCWzUXRuhGZJ1X0-bw1y1UkQ" style="color: red;"><i class="fa-brands fa-youtube fa-3x"></i></a>
-                        <a href="https://www.linkedin.com/in/christian-silva-negrete-26913a22b/" style="color: blue;"><i class="fa-brands fa fa-linkedin fa-3x"></i></a>
-
+                    <div class="skill">
+                        <span class="chart chart1" data-percent="90">
+                            <span class="percent">90</span>
+                        </span>
+                        <h4>Python & ETL</h4>
+                        <p>Pandas, NumPy, Scripts</p>
                     </div>
                 </div>
-                <div class="cont">
-                    <form action="https://formsubmit.co/silvanegrete.ch@gmail.com" class="formulario_contacto" method="POST">
-                        <input type="text" name="name" placeholder="Nombre..." required>
-                        <input type="email" name="email" placeholder="Correo..." required>
-                        <input type="text" name="mensaje" placeholder="Mensaje" required>
-                        <button type="submit" class="btn"><span>Enviar</span><img src="https://i.cloudup.com/2ZAX3hVsBE-3000x3000.png" height="62" width="62"></button>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart2" data-percent="85">
+                            <span class="percent">85</span>
+                        </span>
+                        <h4>Apache Airflow</h4>
+                        <p>Orquestación & DAGs</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart3" data-percent="80">
+                            <span class="percent">80</span>
+                        </span>
+                        <h4>GCP & BigQuery</h4>
+                        <p>Data Warehouse</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fila">
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart4" data-percent="95">
+                            <span class="percent">95</span>
+                        </span>
+                        <h4>SQL / PL-SQL</h4>
+                        <p>Oracle, Optimization</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart5" data-percent="75">
+                            <span class="percent">75</span>
+                        </span>
+                        <h4>Data Viz</h4>
+                        <p>Power BI, Looker</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart6" data-percent="70">
+                            <span class="percent">70</span>
+                        </span>
+                        <h4>Azure & DevOps</h4>
+                        <p>CI/CD, Docker</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Proyectos Destacados</h2>
+            <div class="galeria">
+                <div class="proyecto">
+                    <img src="img/airflow_dag_demo.jpg" alt="Arquitectura ETL">
+                    <div class="overlay">
+                        <h3>Pipeline Financiero GCP</h3>
+                        <p>Migración On-Premise a BigQuery con Airflow y Data Fusion.</p>
+                        <p class="tech-tags">Python | Airflow | BigQuery</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/bot_architecture.png" alt="Chatbot IA">
+                    <div class="overlay">
+                        <h3>Asistente Virtual IA</h3>
+                        <p>Integración Azure Bot Service con NLP Corporativo.</p>
+                        <p class="tech-tags">Nodejs | Azure | NLP</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/dashboard_demo.png" alt="Dashboard Automatizado">
+                    <div class="overlay">
+                        <h3>Automatización de Reportes</h3>
+                        <p>Extracción de datos y visualización automática.</p>
+                        <p class="tech-tags">Python | Sql Server | Power BI</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/mailbot_arq.png" alt="Dashboard Automatizado">
+                    <div class="overlay">
+                        <h3>Automatización de procesos</h3>
+                        <p>Flujos de automatizacion para procesos de gestión</p>
+                        <p class="tech-tags">App Logic | Azure | JavaScript</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contacto" id="contacto">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Contacto</h2>
+            <div class="fila-contacto">
+                <div class="col-info">
+                    <p><i class="fa-solid fa-envelope"></i> silvanegrete.ch@gmail.com</p>
+                    <p><i class="fa-solid fa-location-dot"></i> Santiago, Chile</p>
+                    <div class="redes-contacto">
+                        <a href="https://linkedin.com/in/christian-silva-negrete-26913a22b/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://github.com/christian-devsam" target="_blank"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-form">
+                    <form action="https://formsubmit.co/silvanegrete.ch@gmail.com" method="POST">
+    
                         <input type="hidden" name="_next" value="https://christian-devsam.github.io/myPortfolioChristianDev/">
+                        
+                        <input type="hidden" name="_subject" value="¡Nuevo contacto desde tu Portafolio de Datos!">
+                        
                         <input type="hidden" name="_captcha" value="false">
+
+                        <input type="hidden" name="_template" value="table">
+
+                        <input type="text" name="name" placeholder="Nombre / Empresa" required>
+                        <input type="email" name="email" placeholder="Correo Electrónico" required>
+                        <textarea name="message" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                        
+                        <button type="submit" class="btn-enviar">
+                            Enviar Mensaje <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+
                     </form>
-                    
                 </div>
             </div>
         </div>
     </section>
 
     <footer>
-        
-        <div class="copyright">
-            &copy; Copyright <strong><span>ChristianDEV</span></strong>. Todos Los derechos reservados
-          </div>
-          <div class="credits">
-            Diseñada y escrita por <a href="">ChristianDEV</a>.
-          </div>
+        <p>&copy; 2025 Christian Silva | Data Engineer</p>
     </footer>
 
-    <!-- JS PARTICULES.JS-->
+    <div id="modal-imagen" class="modal">
+        <span class="cerrar">&times;</span>
+        <img class="modal-contenido" id="img-expandida">
+        <div id="caption"></div>
+    </div>
+
     <script src="js/particles.min.js"></script>
     <script src="js/fondo.js"></script>
+    <script src="app.js"></script> 
+    
+    <script>
+        // Obtener el modal
+        var modal = document.getElementById("modal-imagen");
+        var modalImg = document.getElementById("img-expandida");
+        var captionText = document.getElementById("caption");
+
+        // Obtener todas las imágenes de los proyectos
+        var imagenes = document.querySelectorAll('.proyecto img');
+
+        // Poner el evento onclick a cada imagen
+        imagenes.forEach(function(img) {
+            img.onclick = function(){
+                modal.style.display = "flex";
+                modalImg.src = this.src; // Usa la misma imagen
+                // Opcional: Si quieres usar el texto del h3 como descripción
+                // captionText.innerHTML = this.nextElementSibling.querySelector('h3').innerHTML; 
+            }
+        });
+
+        // Obtener el botón de cerrar (X)
+        var span = document.getElementsByClassName("cerrar")[0];
+
+        // Cuando se hace clic en <span> (x), cerrar el modal
+        span.onclick = function() { 
+            modal.style.display = "none";
+        }
+
+        // También cerrar si se hace clic fuera de la imagen (en el fondo oscuro)
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>

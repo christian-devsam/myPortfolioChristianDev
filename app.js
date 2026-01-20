@@ -1,139 +1,107 @@
-//funciòn que carga las animaciones de las habilidades
-function cargarAnimaciones(){
-    $(function(){
-        $('.chart1').easyPieChart({
-            size:160,
-            barColor:"#ff5b00",
-            scaleLength:0,
-            lineWidth:15,
-            tackColor:"#525151",
-            lineCap:"circle",
-            animate:2000,
-        });
-        $('.chart2').easyPieChart({
-            size:160,
-            barColor:"#ff5b00",
-            scaleLength:0,
-            lineWidth:15,
-            tackColor:"#525151",
-            lineCap:"circle",
-            animate:2000,
-        });
-        $('.chart3').easyPieChart({
-            size:160,
-            barColor:"#ff5b00",
-            scaleLength:0,
-            lineWidth:15,
-            tackColor:"#525151",
-            lineCap:"circle",
-            animate:2000,
-        });
-        $('.chart4').easyPieChart({
-            size:160,
-            barColor:"#ff5b00",
-            scaleLength:0,
-            lineWidth:15,
-            tackColor:"#525151",
-            lineCap:"circle",
-            animate:2000,
-        });
-        $('.chart5').easyPieChart({
-            size:160,
-            barColor:"#ff5b00",
-            scaleLength:0,
-            lineWidth:15,
-            tackColor:"#525151",
-            lineCap:"circle",
-            animate:2000,
-        });
-        $('.chart6').easyPieChart({
-            size:160,
-            barColor:"#ff5b00",
-            scaleLength:0,
-            lineWidth:15,
-            tackColor:"#525151",
-            lineCap:"circle",
-            animate:2000,
-        });
+// Detecto el scrolling para aplicar la animación de la barra de habilidades
+let menuVisible = false;
 
-    })
-}
-//Función para filtrar las categorías de los trabajos
-function verCategoria(cat){
-    const items = document.getElementsByClassName("item");
-    for(let i=0; i < items.length;i++){
-        items[i].style.display = "none";
+// Función que oculta o muestra el menu
+function mostrarOcultarMenu(){
+    if(menuVisible){
+        document.getElementById("nav").classList ="";
+        menuVisible = false;
+    }else{
+        document.getElementById("nav").classList ="responsive";
+        menuVisible = true;
     }
-
-    const itemCat = document.getElementsByClassName(cat);
-    for(let i = 0; i<itemCat.length;i++){
-        itemCat[i].style.display = "block";
-    }
-
-    const links = document.querySelectorAll(".trabajos nav a");
-    links[0].className = "";
-    links[1].className = "";
-    links[2].className = "";
-    links[3].className = "";
-
-    const itemSeleccionado = document.getElementById(cat);
-    itemSeleccionado.className = "borde";
 }
 
-//Función que detecta cuando lanzar la animación de las habilidades
+function seleccionar(){
+    //oculto el menu una vez que selecciono una opcion
+    document.getElementById("nav").classList = "";
+    menuVisible = false;
+}
+
+// Funcion que aplica las animaciones de las habilidades
 function efectoHabilidades(){
-    var skills = document.getElementById("habilidades");
+    var skills = document.getElementById("skills");
     var distancia_skills = window.innerHeight - skills.getBoundingClientRect().top;
     if(distancia_skills >= 300){
         let habilidades = document.getElementsByClassName("chart");
-        habilidades[0].classList.add("chart1");
-        habilidades[1].classList.add("chart2");
-        habilidades[2].classList.add("chart3");
-        habilidades[3].classList.add("chart4");
-        habilidades[4].classList.add("chart5");
-        habilidades[5].classList.add("chart6");
+        // Asignamos las clases específicas definidas en el CSS o JS
+        habilidades[0].classList.add("chart1"); // Python
+        habilidades[1].classList.add("chart2"); // Airflow
+        habilidades[2].classList.add("chart3"); // GCP
+        habilidades[3].classList.add("chart4"); // SQL
+        habilidades[4].classList.add("chart5"); // PowerBI
+        habilidades[5].classList.add("chart6"); // Azure
 
         cargarAnimaciones();
     }
 }
 
-//detecto el scrolling para aplicar la animación de las habilidaes
+// ESTA ES LA PARTE CLAVE PARA TU PERFIL DE DATOS
+function cargarAnimaciones(){
+    $(function(){
+        // 1. Python & Pandas (Azul Corporativo)
+        $('.chart1').easyPieChart({
+            size: 160,
+            barColor: "#38bdf8", // Cyan Neon
+            trackColor: "#1e293b", // Fondo oscuro
+            scaleLength: 0,
+            lineWidth: 10, // Un poco más fino es más elegante
+            lineCap: "circle",
+            animate: 2000,
+        });
+        // 2. Apache Airflow (Rojo marca Airflow)
+        $('.chart2').easyPieChart({
+            size: 160,
+            barColor: "#38bdf8", // Cyan Neon
+            trackColor: "#1e293b", // Fondo oscuro
+            scaleLength: 0,
+            lineWidth: 10, // Un poco más fino es más elegante
+            lineCap: "circle",
+            animate: 2000,
+        });
+        // 3. Google Cloud / BigQuery (Amarillo/Dorado)
+        $('.chart3').easyPieChart({
+            size: 160,
+            barColor: "#38bdf8", // Cyan Neon
+            trackColor: "#1e293b", // Fondo oscuro
+            scaleLength: 0,
+            lineWidth: 10, // Un poco más fino es más elegante
+            lineCap: "circle",
+            animate: 2000,
+        });
+        // 4. SQL / PL-SQL (Gris Claro)
+        $('.chart4').easyPieChart({
+            size: 160,
+            barColor: "#38bdf8", // Cyan Neon
+            trackColor: "#1e293b", // Fondo oscuro
+            scaleLength: 0,
+            lineWidth: 10, // Un poco más fino es más elegante
+            lineCap: "circle",
+            animate: 2000,
+        });
+        // 5. Power BI / Viz (Naranja)
+        $('.chart5').easyPieChart({
+            size: 160,
+            barColor: "#38bdf8", // Cyan Neon
+            trackColor: "#1e293b", // Fondo oscuro
+            scaleLength: 0,
+            lineWidth: 10, // Un poco más fino es más elegante
+            lineCap: "circle",
+            animate: 2000,
+        });
+        // 6. Azure & DevOps (Azul Claro)
+        $('.chart6').easyPieChart({
+            size: 160,
+            barColor: "#38bdf8", // Cyan Neon
+            trackColor: "#1e293b", // Fondo oscuro
+            scaleLength: 0,
+            lineWidth: 10, // Un poco más fino es más elegante
+            lineCap: "circle",
+            animate: 2000,
+        });
+    })
+}
+
 window.onscroll = function(){
     efectoHabilidades();
-}
-
-//función que muestra el menu responsive{
-function responsiveMenu(){
-    let x = document.getElementById("nav");
-    if(x.className===""){
-        x.className = "responsive";
-
-        //creamos el elemento que cierra el menu
-        let span = document.createElement("span");
-        span.innerHTML = "X";
-        document.getElementById("nav").appendChild(span);
-
-        //quitamos el boton eliminar cuando se hace click sobre este
-        span.onclick = function(){
-            x.className = "";
-            span.remove();
-        }
-    }else{
-        x.className="";
-    }
-}
-
-//Este codigo es para agregar una función a cada links del menu
-//responsive
-//cuando se presione en cualquier de los links del menu debe desaparecer el menu
-const links = document.querySelectorAll("#nav a");
-for(i=0; i < links.length;i++){
-    links[i].onclick = function(){
-        var x = document.getElementById("nav");
-        x.className = "";
-
-        //removemos el boton eliminar
-        btnEliminar = document.querySelector("#nav span");
-        btnEliminar.remove();
-    }
 }
