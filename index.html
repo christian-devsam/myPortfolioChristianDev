@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.6/jquery.easypiechart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilo.css">
+    <title>Christian Silva | Data Engineer</title>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <section id="inicio" class="inicio">
+        <div class="contenido-banner">
+            <div class="contenedor-img">
+                <img src="img/tu_foto.jpg" alt="Christian Silva">
+            </div>
+            <h1>Christian Silva Negrete</h1>
+            <h2>Data Engineer | Automation & GenAI Specialist</h2>
+            <div class="redes">
+                <a href="https://linkedin.com/in/christian-silva-negrete-26913a22b/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://github.com/christian-devsam" target="_blank"><i class="fa-brands fa-github"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre-mi" class="sobre-mi">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Sobre Mí</h2>
+            
+            <div class="fila-sobre-mi">
+                <div class="col-texto">
+                    <p>
+                        Ingeniero en Informática con sólida experiencia en la construcción de <strong>Pipelines de Datos, ETL y Automatización Cloud</strong>. 
+                        Me especializo en transformar datos complejos en decisiones estratégicas utilizando <strong>Google Cloud Platform (BigQuery, Data Fusion)</strong> y Azure.
+                    </p>
+                    <p>
+                        Mi enfoque combina la ingeniería de datos tradicional con tecnologías emergentes. Actualmente, estoy integrando <strong>Inteligencia Artificial Generativa</strong> en flujos de negocio para crear soluciones de alto impacto y automatización inteligente.
+                    </p>
+                    <a href="https://raw.githubusercontent.com/christian-devsam/myPortfolioChristianDev/main/cv_csilva.pdf" target="_blank" class="btn-cv">
+                        Descargar CV <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
+
+                <div class="col-badge">
+                    <div class="diplomado-badge">
+                        <div class="icono-ia">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <div class="texto-ia">
+                            <h4>Diplomado en IA Generativa</h4>
+                            <p>Pontificia Universidad Católica (PUC)</p>
+                            <small>Especialización en LLMs, RAG & Prompt Eng.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="skills" id="skills">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Stack Tecnológico</h2>
+            <h3>Arquitectura de Datos & Cloud</h3>
+            
+            <div class="fila">
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart1" data-percent="90">
+                            <span class="percent">90</span>
+                        </span>
+                        <h4>Python & ETL</h4>
+                        <p>Pandas, NumPy, Scripts</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart2" data-percent="85">
+                            <span class="percent">85</span>
+                        </span>
+                        <h4>Apache Airflow</h4>
+                        <p>Orquestación & DAGs</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart3" data-percent="80">
+                            <span class="percent">80</span>
+                        </span>
+                        <h4>GCP & BigQuery</h4>
+                        <p>Data Warehouse</p>
+                    </div>
+                </div>
+            </div>
+            <div class="fila">
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart4" data-percent="95">
+                            <span class="percent">95</span>
+                        </span>
+                        <h4>SQL / PL-SQL</h4>
+                        <p>Oracle, Optimization</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart5" data-percent="75">
+                            <span class="percent">75</span>
+                        </span>
+                        <h4>Data Viz</h4>
+                        <p>Power BI, Looker</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="skill">
+                        <span class="chart chart6" data-percent="70">
+                            <span class="percent">70</span>
+                        </span>
+                        <h4>Azure & DevOps</h4>
+                        <p>CI/CD, Docker</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Proyectos Destacados</h2>
+            <div class="galeria">
+                <div class="proyecto">
+                    <img src="img/airflow_dag_demo.jpg" alt="Arquitectura ETL">
+                    <div class="overlay">
+                        <h3>Pipeline Financiero GCP</h3>
+                        <p>Migración On-Premise a BigQuery con Airflow y Data Fusion.</p>
+                        <p class="tech-tags">Python | Airflow | BigQuery</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/bot_architecture.png" alt="Chatbot IA">
+                    <div class="overlay">
+                        <h3>Asistente Virtual IA</h3>
+                        <p>Integración Azure Bot Service con NLP Corporativo.</p>
+                        <p class="tech-tags">Nodejs | Azure | NLP</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/dashboard_demo.png" alt="Dashboard Automatizado">
+                    <div class="overlay">
+                        <h3>Automatización de Reportes</h3>
+                        <p>Extracción de datos y visualización automática.</p>
+                        <p class="tech-tags">Python | Sql Server | Power BI</p>
+                    </div>
+                </div>
+                <div class="proyecto">
+                    <img src="img/mailbot_arq.png" alt="Dashboard Automatizado">
+                    <div class="overlay">
+                        <h3>Automatización de procesos</h3>
+                        <p>Flujos de automatizacion para procesos de gestión</p>
+                        <p class="tech-tags">App Logic | Azure | JavaScript</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contacto" id="contacto">
+        <div class="contenido-seccion">
+            <h2 class="titulo-seccion">Contacto</h2>
+            <div class="fila-contacto">
+                <div class="col-info">
+                    <p><i class="fa-solid fa-envelope"></i> silvanegrete.ch@gmail.com</p>
+                    <p><i class="fa-solid fa-location-dot"></i> Santiago, Chile</p>
+                    <div class="redes-contacto">
+                        <a href="https://linkedin.com/in/christian-silva-negrete-26913a22b/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://github.com/christian-devsam" target="_blank"><i class="fa-brands fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-form">
+                    <form action="https://formsubmit.co/silvanegrete.ch@gmail.com" method="POST">
+    
+                        <input type="hidden" name="_next" value="https://christian-devsam.github.io/myPortfolioChristianDev/">
+                        
+                        <input type="hidden" name="_subject" value="¡Nuevo contacto desde tu Portafolio de Datos!">
+                        
+                        <input type="hidden" name="_captcha" value="false">
+
+                        <input type="hidden" name="_template" value="table">
+
+                        <input type="text" name="name" placeholder="Nombre / Empresa" required>
+                        <input type="email" name="email" placeholder="Correo Electrónico" required>
+                        <textarea name="message" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                        
+                        <button type="submit" class="btn-enviar">
+                            Enviar Mensaje <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Christian Silva | Data Engineer</p>
+    </footer>
+
+    <div id="modal-imagen" class="modal">
+        <span class="cerrar">&times;</span>
+        <img class="modal-contenido" id="img-expandida">
+        <div id="caption"></div>
+    </div>
+
+    <script src="js/particles.min.js"></script>
+    <script src="js/fondo.js"></script>
+    <script src="app.js"></script> 
+    
+    <script>
+        // Obtener el modal
+        var modal = document.getElementById("modal-imagen");
+        var modalImg = document.getElementById("img-expandida");
+        var captionText = document.getElementById("caption");
+
+        // Obtener todas las imágenes de los proyectos
+        var imagenes = document.querySelectorAll('.proyecto img');
+
+        // Poner el evento onclick a cada imagen
+        imagenes.forEach(function(img) {
+            img.onclick = function(){
+                modal.style.display = "flex";
+                modalImg.src = this.src; // Usa la misma imagen
+                // Opcional: Si quieres usar el texto del h3 como descripción
+                // captionText.innerHTML = this.nextElementSibling.querySelector('h3').innerHTML; 
+            }
+        });
+
+        // Obtener el botón de cerrar (X)
+        var span = document.getElementsByClassName("cerrar")[0];
+
+        // Cuando se hace clic en <span> (x), cerrar el modal
+        span.onclick = function() { 
+            modal.style.display = "none";
+        }
+
+        // También cerrar si se hace clic fuera de la imagen (en el fondo oscuro)
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
