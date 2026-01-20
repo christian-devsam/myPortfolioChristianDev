@@ -8,7 +8,7 @@
     --text-primary: #f8fafc;  /* Blanco Brillante */
     --text-secondary: #cbd5e1; /* Gris perla para párrafos */
 }
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -53,6 +53,23 @@ section {
     align-items: center;
     justify-content: center;
     text-align: center;
+}
+
+.inicio header {
+    position: fixed; /* Se queda pegado */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Por encima de todo */
+    background: rgba(30, 41, 59, 0.8); /* Fondo semitransparente */
+    backdrop-filter: blur(10px); /* Efecto vidrio */
+    padding: 15px 50px; /* Ajusta el padding para que se vea bien */
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+/* Compensa el espacio para que el contenido no quede tapado al principio */
+.inicio .contenido-banner {
+    padding-top: 100px; 
 }
 
 .contenedor-img img {
@@ -438,4 +455,29 @@ footer { text-align: center; padding: 40px; color: var(--text-secondary); font-s
     }
     .col-texto p { text-align: left; }
     .col-badge { width: 100%; }
+}
+
+/* Efecto Máquina de Escribir */
+.typewriter {
+    overflow: hidden; /* Oculta el texto que no cabe */
+    border-right: .15em solid var(--accent); /* El cursor parpadeante */
+    white-space: nowrap; /* Mantiene el texto en una línea */
+    margin: 0 auto; 
+    letter-spacing: .10em; 
+    animation: 
+        typing 3.5s steps(40, end),
+        blink-caret .75s step-end infinite;
+    max-width: fit-content; /* Se ajusta al ancho del texto */
+}
+
+/* La animación de escribir */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+/* La animación del cursor */
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--accent) }
 }
