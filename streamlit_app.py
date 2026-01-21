@@ -11,9 +11,8 @@ except RuntimeError:
 # ----------------------------------------
 
 from pypdf import PdfReader
-# --- CORRECCIÓN DE IMPORTACIÓN ---
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-# ---------------------------------
+# Volvemos a la importación clásica y estable:
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
