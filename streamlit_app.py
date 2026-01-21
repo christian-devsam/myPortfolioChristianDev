@@ -11,8 +11,12 @@ except RuntimeError:
 # ----------------------------------------
 
 from pypdf import PdfReader
-# Volvemos a la importación clásica y estable:
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+# --- CORRECCIÓN CLAVE PARA VERSIONES NUEVAS ---
+# Importamos desde la librería específica para evitar errores
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+# ----------------------------------------------
+
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -56,6 +60,7 @@ def load_and_process_pdf(pdf_path):
         st.error("❌ No se encontró el archivo PDF.")
         return None
     
+    # Usamos el splitter importado correctamente
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(text)
     
@@ -78,12 +83,12 @@ def load_and_process_pdf(pdf_path):
         return None
 
 def get_conversation_chain(vectorstore):
-    # Usamos 'gemini-pro' y transporte REST
+    # Usamos el modelo más actual: gemini-1.5-flash
     llm = ChatGoogleGenerativeAI(
-        model="gemini-pro", 
+        model="gemini-1.5-flash", 
         google_api_key=api_key, 
         temperature=0.3,
-        transport="rest"
+        transport="rest"  # Evita errores de conexión GRPC
     )
     
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
