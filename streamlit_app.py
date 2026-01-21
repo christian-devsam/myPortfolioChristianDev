@@ -77,13 +77,13 @@ def load_and_process_pdf(pdf_path):
         return None
 
 def get_conversation_chain(vectorstore):
-    # --- CORRECCIÓN CLAVE: transport="rest" ---
-    # Esto evita el bloqueo infinito de "Retrying..."
+    # --- CAMBIO IMPORTANTE: Usamos 'gemini-pro' ---
+    # Es el modelo más estable y compatible actualmente
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash", 
+        model="gemini-pro", 
         google_api_key=api_key, 
         temperature=0.3,
-        transport="rest"  # <--- ESTA ES LA MAGIA
+        transport="rest"
     )
     
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
