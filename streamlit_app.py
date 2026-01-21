@@ -2,14 +2,13 @@ import streamlit as st
 import asyncio
 import os
 
-# --- PARCHE MÁGICO PARA EL EVENT LOOP (SOLUCIÓN AL ERROR) ---
-# Esto crea el motor asíncrono si no existe en el hilo de Streamlit
+# --- PARCHE MÁGICO PARA EL EVENT LOOP ---
 try:
     asyncio.get_running_loop()
 except RuntimeError:
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-# ------------------------------------------------------------
+# ----------------------------------------
 
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -45,7 +44,6 @@ except FileNotFoundError:
 
 @st.cache_resource
 def load_and_process_pdf(pdf_path):
-    # 1. Leer el PDF
     text = ""
     try:
         pdf_reader = PdfReader(pdf_path)
@@ -57,19 +55,16 @@ def load_and_process_pdf(pdf_path):
         st.error("❌ No se encontró el archivo PDF.")
         return None
     
-    # 2. Partir texto
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(text)
     
     if not chunks:
         return None
 
-    # 3. Crear Vector Store (MODELO LOCAL)
     try:
-        # Forzamos el uso de CPU para evitar conflictos
+        # Embeddings Locales (CPU)
         model_kwargs = {'device': 'cpu'}
         encode_kwargs = {'normalize_embeddings': True}
-        
         embeddings = HuggingFaceEmbeddings(
             model_name="all-MiniLM-L6-v2",
             model_kwargs=model_kwargs,
@@ -82,7 +77,15 @@ def load_and_process_pdf(pdf_path):
         return None
 
 def get_conversation_chain(vectorstore):
-    llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key, temperature=0.3)
+    # --- CORRECCIÓN CLAVE: transport="rest" ---
+    # Esto evita el bloqueo infinito de "Retrying..."
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-1.5-flash", 
+        google_api_key=api_key, 
+        temperature=0.3,
+        transport="rest"  # <--- ESTA ES LA MAGIA
+    )
+    
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
     chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
@@ -94,7 +97,7 @@ def get_conversation_chain(vectorstore):
 # --- PROCESAMIENTO INICIAL ---
 
 if "conversation" not in st.session_state:
-    with st.spinner("Iniciando motor de IA local... (Esto tarda un poco solo la primera vez)"):
+    with st.spinner("Iniciando motor de IA local..."):
         try:
             vectorstore = load_and_process_pdf("cv_csilva.pdf")
             
