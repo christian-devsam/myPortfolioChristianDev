@@ -1,10 +1,22 @@
 import streamlit as st
+import asyncio
+import os
+
+# --- PARCHE MÁGICO PARA EL EVENT LOOP (SOLUCIÓN AL ERROR) ---
+# Esto crea el motor asíncrono si no existe en el hilo de Streamlit
+try:
+    asyncio.get_running_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+# ------------------------------------------------------------
+
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from langchain_community.embeddings import HuggingFaceEmbeddings  # <--- CAMBIO IMPORTANTE
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Configuración de página
@@ -22,7 +34,7 @@ st.markdown("""
 st.title("✨ Asistente IA de Christian Silva")
 st.write("Potenciado por **Google Gemini** + **Embeddings Locales**.")
 
-# --- GESTIÓN DE LA API KEY (Solo para el Chat, no para Embeddings) ---
+# --- GESTIÓN DE LA API KEY ---
 try:
     api_key = st.secrets["GOOGLE_API_KEY"]
 except FileNotFoundError:
@@ -52,10 +64,17 @@ def load_and_process_pdf(pdf_path):
     if not chunks:
         return None
 
-    # 3. Crear Vector Store (MODELO LOCAL - GRATIS Y SIN TIMEOUTS)
-    # Usamos all-MiniLM-L6-v2 que es rápido y ligero
+    # 3. Crear Vector Store (MODELO LOCAL)
     try:
-        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        # Forzamos el uso de CPU para evitar conflictos
+        model_kwargs = {'device': 'cpu'}
+        encode_kwargs = {'normalize_embeddings': True}
+        
+        embeddings = HuggingFaceEmbeddings(
+            model_name="all-MiniLM-L6-v2",
+            model_kwargs=model_kwargs,
+            encode_kwargs=encode_kwargs
+        )
         vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
         return vectorstore
     except Exception as e:
@@ -63,7 +82,6 @@ def load_and_process_pdf(pdf_path):
         return None
 
 def get_conversation_chain(vectorstore):
-    # Usamos Gemini solo para generar la respuesta final (Chat)
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key, temperature=0.3)
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
     chain = ConversationalRetrievalChain.from_llm(
@@ -76,7 +94,7 @@ def get_conversation_chain(vectorstore):
 # --- PROCESAMIENTO INICIAL ---
 
 if "conversation" not in st.session_state:
-    with st.spinner("Descargando modelo local y leyendo CV... (Esto puede tardar 30 seg la primera vez)"):
+    with st.spinner("Iniciando motor de IA local... (Esto tarda un poco solo la primera vez)"):
         try:
             vectorstore = load_and_process_pdf("cv_csilva.pdf")
             
@@ -97,7 +115,7 @@ if "process_complete" in st.session_state:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian en Data Engineering?"):
+    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
