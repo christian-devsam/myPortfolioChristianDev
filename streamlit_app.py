@@ -47,47 +47,47 @@ def load_and_process_pdf(pdf_path):
         st.error("❌ No se encontró el archivo PDF.")
         return None
     
-    if not text:
-        st.error("⚠️ El PDF parece estar vacío o es una imagen escaneada. Intenta subir un PDF con texto seleccionable.")
-        return None
-    
     # 2. Partir texto
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
     chunks = text_splitter.split_text(text)
     
     total_chunks = len(chunks)
+    print(f"Total de fragmentos a procesar: {total_chunks}") # LOG
+
     if total_chunks == 0:
         return None
 
-    # 3. Crear Vector Store POR LOTES (Para evitar Error 504)
+    # 3. Crear Vector Store (MODO TORTUGA: DE 1 EN 1)
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004", google_api_key=api_key)
     vectorstore = None
     
-    # Barra de progreso
-    progress_bar = st.progress(0, text="Iniciando análisis del perfil...")
-    batch_size = 5 # Procesamos de 5 en 5 fragmentos
+    progress_text = "Iniciando análisis lento y seguro..."
+    progress_bar = st.progress(0, text=progress_text)
     
     try:
-        for i in range(0, total_chunks, batch_size):
-            # Tomamos un lote pequeño
-            batch = chunks[i : i + batch_size]
+        # Procesamos DE UNO EN UNO para máxima seguridad
+        for i, chunk in enumerate(chunks):
+            # LOG PARA VER SI AVANZA
+            print(f"Procesando fragmento {i+1}/{total_chunks}...") 
             
             if vectorstore is None:
-                # El primer lote crea la base de datos
-                vectorstore = FAISS.from_texts(texts=batch, embedding=embeddings)
+                vectorstore = FAISS.from_texts(texts=[chunk], embedding=embeddings)
             else:
-                # Los siguientes lotes se agregan
-                vectorstore.add_texts(batch)
-                time.sleep(0.5) # Pausa pequeña para no saturar la API
+                vectorstore.add_texts([chunk])
+            
+            # PAUSA DE SEGURIDAD (1.5 segundos entre cada uno)
+            time.sleep(1.5)
             
             # Actualizar barra
-            progress = min((i + batch_size) / total_chunks, 1.0)
-            progress_bar.progress(progress, text=f"Analizando fragmento {min(i + batch_size, total_chunks)} de {total_chunks}...")
+            progress_percent = (i + 1) / total_chunks
+            progress_bar.progress(progress_percent, text=f"Analizando parte {i+1} de {total_chunks}...")
             
         progress_bar.empty() # Limpiar barra al terminar
+        st.success("¡Análisis completado!")
         return vectorstore
         
     except Exception as e:
+        print(f"ERROR CRÍTICO: {e}")
         st.error(f"Error procesando embeddings: {e}")
         return None
 
@@ -109,7 +109,8 @@ if "conversation" not in st.session_state:
     if vectorstore:
         st.session_state.conversation = get_conversation_chain(vectorstore)
         st.session_state.process_complete = True
-        st.toast("¡Perfil cargado exitosamente!", icon="✅")
+    else:
+        st.warning("⚠️ Esperando procesamiento del PDF...")
 
 # --- INTERFAZ DE CHAT ---
 
