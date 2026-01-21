@@ -11,7 +11,9 @@ except RuntimeError:
 # ----------------------------------------
 
 from pypdf import PdfReader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+# --- CORRECCIÓN DE IMPORTACIÓN ---
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+# ---------------------------------
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -77,8 +79,7 @@ def load_and_process_pdf(pdf_path):
         return None
 
 def get_conversation_chain(vectorstore):
-    # --- CAMBIO IMPORTANTE: Usamos 'gemini-pro' ---
-    # Es el modelo más estable y compatible actualmente
+    # Usamos 'gemini-pro' y transporte REST
     llm = ChatGoogleGenerativeAI(
         model="gemini-pro", 
         google_api_key=api_key, 
