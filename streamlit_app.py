@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
@@ -21,7 +22,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("✨ Asistente IA de Christian Silva")
-st.write("Pregúntame sobre mi experiencia y proyectos.")
+st.write("Potenciado por **Google Gemini**. Pregúntame sobre mi experiencia y proyectos.")
 
 # --- GESTIÓN DE LA API KEY ---
 try:
@@ -39,28 +40,55 @@ def load_and_process_pdf(pdf_path):
     try:
         pdf_reader = PdfReader(pdf_path)
         for page in pdf_reader.pages:
-            text += page.extract_text()
+            content = page.extract_text()
+            if content:
+                text += content
     except FileNotFoundError:
-        st.error("No se encontró el archivo PDF.")
+        st.error("❌ No se encontró el archivo PDF.")
         return None
     
-    # 2. Partir texto (Trozos más pequeños = Menos errores de Timeout)
+    if not text:
+        st.error("⚠️ El PDF parece estar vacío o es una imagen escaneada. Intenta subir un PDF con texto seleccionable.")
+        return None
+    
+    # 2. Partir texto
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
     chunks = text_splitter.split_text(text)
     
-    if not chunks:
+    total_chunks = len(chunks)
+    if total_chunks == 0:
         return None
 
-    # 3. Crear Vector Store (USANDO EL NUEVO MODELO 004)
+    # 3. Crear Vector Store POR LOTES (Para evitar Error 504)
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004", google_api_key=api_key)
+    vectorstore = None
+    
+    # Barra de progreso
+    progress_bar = st.progress(0, text="Iniciando análisis del perfil...")
+    batch_size = 5 # Procesamos de 5 en 5 fragmentos
+    
     try:
-        embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/text-embedding-004", 
-            google_api_key=api_key
-        )
-        vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
+        for i in range(0, total_chunks, batch_size):
+            # Tomamos un lote pequeño
+            batch = chunks[i : i + batch_size]
+            
+            if vectorstore is None:
+                # El primer lote crea la base de datos
+                vectorstore = FAISS.from_texts(texts=batch, embedding=embeddings)
+            else:
+                # Los siguientes lotes se agregan
+                vectorstore.add_texts(batch)
+                time.sleep(0.5) # Pausa pequeña para no saturar la API
+            
+            # Actualizar barra
+            progress = min((i + batch_size) / total_chunks, 1.0)
+            progress_bar.progress(progress, text=f"Analizando fragmento {min(i + batch_size, total_chunks)} de {total_chunks}...")
+            
+        progress_bar.empty() # Limpiar barra al terminar
         return vectorstore
+        
     except Exception as e:
-        st.error(f"Error al conectar con Google Embeddings: {e}")
+        st.error(f"Error procesando embeddings: {e}")
         return None
 
 def get_conversation_chain(vectorstore):
@@ -76,14 +104,12 @@ def get_conversation_chain(vectorstore):
 # --- PROCESAMIENTO INICIAL ---
 
 if "conversation" not in st.session_state:
-    with st.spinner("Cargando CV y conectando con Gemini..."):
-        vectorstore = load_and_process_pdf("cv_csilva.pdf")
-        
-        if vectorstore:
-            st.session_state.conversation = get_conversation_chain(vectorstore)
-            st.session_state.process_complete = True
-        else:
-            st.warning("No se pudo procesar el PDF o falló la conexión con la API.")
+    vectorstore = load_and_process_pdf("cv_csilva.pdf")
+    
+    if vectorstore:
+        st.session_state.conversation = get_conversation_chain(vectorstore)
+        st.session_state.process_complete = True
+        st.toast("¡Perfil cargado exitosamente!", icon="✅")
 
 # --- INTERFAZ DE CHAT ---
 
@@ -101,11 +127,11 @@ if "process_complete" in st.session_state:
             st.write(prompt)
 
         with st.chat_message("assistant"):
-            with st.spinner("Analizando respuesta..."):
+            with st.spinner("Pensando..."):
                 try:
                     response = st.session_state.conversation({'question': prompt})
                     ai_response = response['answer']
                     st.write(ai_response)
                     st.session_state.messages.append({"role": "assistant", "content": ai_response})
                 except Exception as e:
-                    st.error(f"Error: {e}")
+                    st.error(f"Error al responder: {e}")
