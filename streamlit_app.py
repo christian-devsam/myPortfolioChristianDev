@@ -1,17 +1,15 @@
 import streamlit as st
-import time
 from pypdf import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings  # <--- CAMBIO IMPORTANTE
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Configuración de página
 st.set_page_config(page_title="Chat con Christian Silva", page_icon="✨")
 
-# Estilos CSS
 st.markdown("""
 <style>
     .stApp { background-color: #0f172a; color: #e2e8f0; }
@@ -22,9 +20,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("✨ Asistente IA de Christian Silva")
-st.write("Potenciado por **Google Gemini**. Pregúntame sobre mi experiencia y proyectos.")
+st.write("Potenciado por **Google Gemini** + **Embeddings Locales**.")
 
-# --- GESTIÓN DE LA API KEY ---
+# --- GESTIÓN DE LA API KEY (Solo para el Chat, no para Embeddings) ---
 try:
     api_key = st.secrets["GOOGLE_API_KEY"]
 except FileNotFoundError:
@@ -48,50 +46,24 @@ def load_and_process_pdf(pdf_path):
         return None
     
     # 2. Partir texto
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(text)
     
-    total_chunks = len(chunks)
-    print(f"Total de fragmentos a procesar: {total_chunks}") # LOG
-
-    if total_chunks == 0:
+    if not chunks:
         return None
 
-    # 3. Crear Vector Store (MODO TORTUGA: DE 1 EN 1)
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004", google_api_key=api_key)
-    vectorstore = None
-    
-    progress_text = "Iniciando análisis lento y seguro..."
-    progress_bar = st.progress(0, text=progress_text)
-    
+    # 3. Crear Vector Store (MODELO LOCAL - GRATIS Y SIN TIMEOUTS)
+    # Usamos all-MiniLM-L6-v2 que es rápido y ligero
     try:
-        # Procesamos DE UNO EN UNO para máxima seguridad
-        for i, chunk in enumerate(chunks):
-            # LOG PARA VER SI AVANZA
-            print(f"Procesando fragmento {i+1}/{total_chunks}...") 
-            
-            if vectorstore is None:
-                vectorstore = FAISS.from_texts(texts=[chunk], embedding=embeddings)
-            else:
-                vectorstore.add_texts([chunk])
-            
-            # PAUSA DE SEGURIDAD (1.5 segundos entre cada uno)
-            time.sleep(1.5)
-            
-            # Actualizar barra
-            progress_percent = (i + 1) / total_chunks
-            progress_bar.progress(progress_percent, text=f"Analizando parte {i+1} de {total_chunks}...")
-            
-        progress_bar.empty() # Limpiar barra al terminar
-        st.success("¡Análisis completado!")
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
         return vectorstore
-        
     except Exception as e:
-        print(f"ERROR CRÍTICO: {e}")
-        st.error(f"Error procesando embeddings: {e}")
+        st.error(f"Error al crear embeddings locales: {e}")
         return None
 
 def get_conversation_chain(vectorstore):
+    # Usamos Gemini solo para generar la respuesta final (Chat)
     llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key, temperature=0.3)
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
     chain = ConversationalRetrievalChain.from_llm(
@@ -104,13 +76,16 @@ def get_conversation_chain(vectorstore):
 # --- PROCESAMIENTO INICIAL ---
 
 if "conversation" not in st.session_state:
-    vectorstore = load_and_process_pdf("cv_csilva.pdf")
-    
-    if vectorstore:
-        st.session_state.conversation = get_conversation_chain(vectorstore)
-        st.session_state.process_complete = True
-    else:
-        st.warning("⚠️ Esperando procesamiento del PDF...")
+    with st.spinner("Descargando modelo local y leyendo CV... (Esto puede tardar 30 seg la primera vez)"):
+        try:
+            vectorstore = load_and_process_pdf("cv_csilva.pdf")
+            
+            if vectorstore:
+                st.session_state.conversation = get_conversation_chain(vectorstore)
+                st.session_state.process_complete = True
+                st.toast("¡IA Lista para responder!", icon="✅")
+        except Exception as e:
+            st.error(f"Ocurrió un error general: {e}")
 
 # --- INTERFAZ DE CHAT ---
 
@@ -122,7 +97,7 @@ if "process_complete" in st.session_state:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    if prompt := st.chat_input("Ej: ¿Qué tecnologías domina Christian?"):
+    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian en Data Engineering?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
@@ -135,4 +110,4 @@ if "process_complete" in st.session_state:
                     st.write(ai_response)
                     st.session_state.messages.append({"role": "assistant", "content": ai_response})
                 except Exception as e:
-                    st.error(f"Error al responder: {e}")
+                    st.error(f"Error: {e}")
