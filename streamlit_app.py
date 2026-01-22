@@ -16,19 +16,48 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain_community.embeddings import HuggingFaceEmbeddings
-
-# --- IMPORTACIÓN DE GROQ ---
 from langchain_groq import ChatGroq
 
 # Configuración de página
 st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡")
 
+# --- ESTILOS CSS PERSONALIZADOS ---
 st.markdown("""
 <style>
-    .stApp { background-color: #0f172a; color: #e2e8f0; }
-    h1 { color: #f97316 !important; } /* Naranja estilo Groq */
-    .stChatMessage { background-color: #1e293b; border: 1px solid #334155; }
-    .stTextInput input { color: #0f172a !important; }
+    /* Fondo oscuro global */
+    .stApp { 
+        background-color: #0f172a; 
+    }
+    
+    /* Títulos en naranja Groq */
+    h1, h2, h3 { 
+        color: #f97316 !important; 
+    }
+    
+    /* TEXTO BLANCO Y LEGIBLE EN MENSAJES */
+    .stMarkdown p, .stMarkdown li {
+        color: #ffffff !important;
+        font-size: 1.05rem; /* Un poco más grande para leer mejor */
+        line-height: 1.6;
+    }
+    
+    /* Cajitas de los mensajes (Usuario y AI) */
+    .stChatMessage { 
+        background-color: #1e293b; 
+        border: 1px solid #334155;
+        border-radius: 10px;
+    }
+    
+    /* CAJA DE TEXTO (INPUT) */
+    .stTextInput input, .stChatInput textarea { 
+        color: #ffffff !important; /* Texto que escribes en blanco */
+        caret-color: #f97316; /* El cursor parpadeante en naranja */
+    }
+    
+    /* El contador de caracteres pequeño */
+    .stChatInput div[data-testid="InputInstructions"] {
+        color: #94a3b8 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -79,8 +108,6 @@ def load_and_process_pdf(pdf_path):
         return None
 
 def get_conversation_chain(vectorstore):
-    # --- INTEGRACIÓN CON GROQ ---
-    # Usamos llama-3.3-70b-versatile que es rapidísimo y muy inteligente
     llm = ChatGroq(
         groq_api_key=api_key,
         model_name="llama-3.3-70b-versatile",
@@ -120,7 +147,9 @@ if "process_complete" in st.session_state:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?"):
+    # --- INPUT CON RESTRICCIÓN DE CARACTERES ---
+    # max_chars=1000 evita enviar textos gigantes
+    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?", max_chars=1000):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
