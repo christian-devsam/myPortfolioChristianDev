@@ -211,8 +211,6 @@ if "process_complete" in st.session_state:
     with tab1:
         st.markdown("### 🗣️ Habla o Escribe")
         
-        # --- ZONA DE AUDIO ---
-        # Definimos columnas para que el micro no ocupe todo el ancho
         c1, c2 = st.columns([1, 6])
         with c1:
             st.write("Grabar:")
@@ -220,19 +218,17 @@ if "process_complete" in st.session_state:
         with c2:
             st.info("Puedes usar el micrófono O escribir abajo. Ambos funcionan.")
 
-        # --- HISTORIAL DE CHAT ---
         if "messages" not in st.session_state: st.session_state.messages = []
         for message in st.session_state.messages:
             with st.chat_message(message["role"]): st.write(message["content"])
 
-        # --- ZONA DE TEXTO (Siempre Visible) ---
-        # Capturamos el input de texto en una variable
         text_input = st.chat_input("Escribe tu pregunta aquí...", max_chars=1000)
 
-        # --- LÓGICA DE UNIFICACIÓN ---
+        # --- CORRECCIÓN AQUÍ: Inicializamos variables ---
         final_prompt = None
+        transcription = None # <--- ESTO ARREGLA EL ERROR. Siempre existe, aunque sea None.
         
-        # 1. Prioridad: ¿Hay audio NUEVO?
+        # 1. Prioridad: Audio
         if audio:
             audio_hash = hashlib.md5(audio['bytes']).hexdigest()
             if audio_hash != st.session_state.last_audio_hash:
@@ -242,11 +238,11 @@ if "process_complete" in st.session_state:
                     if transcription:
                         final_prompt = transcription
         
-        # 2. Si no hubo audio nuevo, ¿Hay texto escrito?
+        # 2. Prioridad: Texto
         if not final_prompt and text_input:
             final_prompt = text_input
 
-        # --- PROCESAMIENTO CENTRALIZADO ---
+        # --- PROCESAMIENTO ---
         if final_prompt:
             st.session_state.messages.append({"role": "user", "content": final_prompt})
             with st.chat_message("user"): st.write(final_prompt)
@@ -261,9 +257,8 @@ if "process_complete" in st.session_state:
                         st.write(ai_response)
                         st.session_state.messages.append({"role": "assistant", "content": ai_response})
                         
-                        # IMPORTANTE: Si usamos audio, forzamos un rerun suave para limpiar estados visuales
-                        # Si usamos texto, st.chat_input limpia solo.
-                        if audio and final_prompt == transcription: # Solo si vino del audio
+                        # LOGICA DE RESET: Solo si hay transcripción Y coincide con el prompt actual
+                        if transcription and final_prompt == transcription: 
                              time.sleep(0.5)
                              st.rerun()
 
@@ -282,7 +277,6 @@ if "process_complete" in st.session_state:
                     ai_response = response['answer']
                     update_metrics(start_time, len(prompt_carta), len(ai_response))
                     st.subheader("Carta Generada:"); st.markdown(ai_response); st.balloons()
-
     # --- PESTAÑA 3: GRAFO ---
     with tab3:
         st.header("Mapa de Habilidades")
@@ -332,6 +326,7 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
 
 
 
