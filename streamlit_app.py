@@ -2,6 +2,7 @@ import streamlit as st
 import asyncio
 import os
 import time
+import hashlib  # <--- NUEVA IMPORTACIÓN CRÍTICA
 
 # --- PARCHE PARA EL EVENT LOOP ---
 try:
@@ -27,7 +28,7 @@ from groq import Groq
 # Configuración de página
 st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡", layout="wide")
 
-# --- ESTILOS CSS (Sidebar Corregido) ---
+# --- ESTILOS CSS ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
@@ -73,7 +74,7 @@ st.markdown("""
         box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.5);
     }
 
-    /* --- SIDEBAR CORREGIDO (OSCURO) --- */
+    /* SIDEBAR OSCURO */
     [data-testid="stSidebar"] {
         background-color: rgb(15, 23, 42) !important;
         border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -114,8 +115,8 @@ st.markdown("""
 if "api_calls" not in st.session_state: st.session_state.api_calls = 0
 if "total_tokens" not in st.session_state: st.session_state.total_tokens = 0
 if "last_latency" not in st.session_state: st.session_state.last_latency = 0.0
-# --- NUEVA VARIABLE PARA EVITAR BUCLES DE AUDIO ---
-if "last_audio_bytes" not in st.session_state: st.session_state.last_audio_bytes = b""
+# --- NUEVA VARIABLE DE CONTROL DE AUDIO ---
+if "last_audio_hash" not in st.session_state: st.session_state.last_audio_hash = None
 
 st.title("⚡ Asistente IA de Christian Silva")
 st.markdown("Potenciado por **Groq (Llama 3.3 + Whisper)** + **Embeddings Locales**.")
@@ -222,28 +223,30 @@ if "process_complete" in st.session_state:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]): st.write(message["content"])
 
-        # LÓGICA CORREGIDA PARA EVITAR BUCLES
+        # --- LÓGICA ANTI-BUCLE (HASH) ---
         prompt = None
         
-        # 1. ¿Hay audio en el widget?
         if audio:
-            # 2. ¿Es un audio NUEVO que no hemos procesado antes?
-            if audio['bytes'] != st.session_state.last_audio_bytes:
-                st.session_state.last_audio_bytes = audio['bytes'] # Marcamos como procesado
+            # 1. Crear Huella Digital del Audio
+            audio_hash = hashlib.md5(audio['bytes']).hexdigest()
+            
+            # 2. Verificar si es un audio NUEVO
+            if audio_hash != st.session_state.last_audio_hash:
+                st.session_state.last_audio_hash = audio_hash # Guardar estado INMEDIATAMENTE
                 
                 with st.spinner("Transcribiendo audio con Whisper..."):
                     transcription = transcribe_audio(audio['bytes'])
                     if transcription:
                         prompt = transcription
             else:
-                # Si el audio es el mismo de antes, NO hacemos nada (evita el bucle)
+                # Si el hash es igual, no hacemos NADA (rompe el bucle)
                 pass
         
-        # 3. Si no hay audio nuevo, miramos la caja de texto
+        # 3. Input de Texto (Backup)
         if not prompt:
             prompt = st.chat_input("Escribe tu pregunta aquí...", max_chars=1000)
 
-        # 4. Procesamos
+        # 4. Procesamiento
         if prompt:
             st.session_state.messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"): st.write(prompt)
@@ -258,10 +261,9 @@ if "process_complete" in st.session_state:
                         st.write(ai_response)
                         st.session_state.messages.append({"role": "assistant", "content": ai_response})
                         
-                        # Si fue por audio, recargamos para limpiar estados visuales
-                        if audio:
-                            time.sleep(0.5)
-                            st.rerun()
+                        # --- IMPORTANTE: ELIMINAMOS ST.RERUN() ---
+                        # Al quitar el rerun, evitamos que el script se reinicie y vuelva a leer el audio antiguo.
+                        # El mensaje ya se mostró arriba con st.write(), así que el usuario lo ve al instante.
                             
                     except Exception as e: st.error(f"Error: {e}")
 
@@ -327,5 +329,6 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
 
 
