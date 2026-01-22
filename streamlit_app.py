@@ -2,17 +2,20 @@ import streamlit as st
 import asyncio
 import os
 
-# --- PARCHE MÁGICO PARA EL EVENT LOOP ---
+# --- PARCHE PARA EL EVENT LOOP (Evita errores de asyncio) ---
 try:
     asyncio.get_running_loop()
 except RuntimeError:
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-# ----------------------------------------
+# -----------------------------------------------------------
 
 from pypdf import PdfReader
-# Volvemos a la importación clásica y estable:
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+# Importación moderna de splitters
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# Importaciones estándar de LangChain v0.2
 from langchain_community.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -53,9 +56,10 @@ def load_and_process_pdf(pdf_path):
             if content:
                 text += content
     except FileNotFoundError:
-        st.error("❌ No se encontró el archivo PDF.")
+        st.error("❌ No se encontró el archivo PDF. Asegúrate de que 'cv_csilva.pdf' está en la carpeta raíz.")
         return None
     
+    # Procesamiento de texto
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(text)
     
@@ -78,15 +82,17 @@ def load_and_process_pdf(pdf_path):
         return None
 
 def get_conversation_chain(vectorstore):
-    # Usamos 'gemini-pro' y transporte REST
+    # Configuración del LLM: Gemini 1.5 Flash + REST
     llm = ChatGoogleGenerativeAI(
-        model="gemini-pro", 
+        model="gemini-1.5-flash", 
         google_api_key=api_key, 
         temperature=0.3,
-        transport="rest"
+        transport="rest"  # Clave para evitar bloqueos en Streamlit Cloud
     )
     
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    
+    # Cadena de conversación estándar
     chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(),
@@ -94,7 +100,7 @@ def get_conversation_chain(vectorstore):
     )
     return chain
 
-# --- PROCESAMIENTO INICIAL ---
+# --- LÓGICA PRINCIPAL ---
 
 if "conversation" not in st.session_state:
     with st.spinner("Iniciando motor de IA local..."):
@@ -106,7 +112,7 @@ if "conversation" not in st.session_state:
                 st.session_state.process_complete = True
                 st.toast("¡IA Lista para responder!", icon="✅")
         except Exception as e:
-            st.error(f"Ocurrió un error general: {e}")
+            st.error(f"Ocurrió un error al iniciar: {e}")
 
 # --- INTERFAZ DE CHAT ---
 
@@ -114,10 +120,12 @@ if "process_complete" in st.session_state:
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
+    # Mostrar historial
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
+    # Input de usuario
     if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?"):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
@@ -131,4 +139,4 @@ if "process_complete" in st.session_state:
                     st.write(ai_response)
                     st.session_state.messages.append({"role": "assistant", "content": ai_response})
                 except Exception as e:
-                    st.error(f"Error: {e}")
+                    st.error(f"Error generando respuesta: {e}")
