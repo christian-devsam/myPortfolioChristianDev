@@ -179,7 +179,7 @@ def transcribe_audio(audio_bytes):
     try:
         return groq_client.audio.transcriptions.create(
             file=("recording.wav", audio_bytes),
-            model="distil-whisper-large-v3-en",
+            model="whisper-large-v3",
             response_format="text"
         )
     except Exception as e:
@@ -318,3 +318,4 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
