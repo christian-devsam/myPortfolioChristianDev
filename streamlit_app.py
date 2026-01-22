@@ -19,7 +19,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 
 # Configuración de página
-st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡")
+st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡", layout="wide")
 
 # --- ESTILOS CSS PERSONALIZADOS ---
 st.markdown("""
@@ -34,29 +34,57 @@ st.markdown("""
         color: #f97316 !important; 
     }
     
-    /* TEXTO BLANCO Y LEGIBLE EN MENSAJES */
-    .stMarkdown p, .stMarkdown li {
+    /* TEXTO BLANCO Y LEGIBLE */
+    .stMarkdown p, .stMarkdown li, .stText, p {
         color: #ffffff !important;
-        font-size: 1.05rem; /* Un poco más grande para leer mejor */
+        font-size: 1.05rem;
         line-height: 1.6;
     }
     
-    /* Cajitas de los mensajes (Usuario y AI) */
+    /* Pestañas (Tabs) */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        white-space: pre-wrap;
+        background-color: #1e293b;
+        border-radius: 5px;
+        color: #ffffff;
+        font-weight: 600;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #f97316 !important;
+        color: white !important;
+    }
+    
+    /* Cajitas de los mensajes */
     .stChatMessage { 
         background-color: #1e293b; 
         border: 1px solid #334155;
         border-radius: 10px;
     }
     
-    /* CAJA DE TEXTO (INPUT) */
-    .stTextInput input, .stChatInput textarea { 
-        color: #000000 !important; /* Texto que escribes en blanco */
-        caret-color: #f97316; /* El cursor parpadeante en naranja */
+    /* INPUTS (Chat y Text Area) */
+    .stTextInput input, .stChatInput textarea, .stTextArea textarea { 
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        border: 1px solid #334155;
+        caret-color: #f97316;
     }
     
-    /* El contador de caracteres pequeño */
-    .stChatInput div[data-testid="InputInstructions"] {
-        color: #94a3b8 !important;
+    /* Botones */
+    .stButton button {
+        background-color: #f97316;
+        color: white;
+        font-weight: bold;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+    }
+    .stButton button:hover {
+        background-color: #ea580c;
+        color: white;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -93,7 +121,6 @@ def load_and_process_pdf(pdf_path):
         return None
 
     try:
-        # Embeddings Locales (CPU)
         model_kwargs = {'device': 'cpu'}
         encode_kwargs = {'normalize_embeddings': True}
         embeddings = HuggingFaceEmbeddings(
@@ -123,45 +150,88 @@ def get_conversation_chain(vectorstore):
     )
     return chain
 
-# --- LÓGICA PRINCIPAL ---
+# --- INICIALIZACIÓN ---
 
 if "conversation" not in st.session_state:
-    with st.spinner("Cargando motor de ultra-velocidad..."):
+    with st.spinner("Cargando cerebro digital..."):
         try:
             vectorstore = load_and_process_pdf("cv_csilva.pdf")
-            
             if vectorstore:
                 st.session_state.conversation = get_conversation_chain(vectorstore)
                 st.session_state.process_complete = True
-                st.toast("¡Groq Activo! 🚀", icon="⚡")
+                st.toast("¡Sistema listo!", icon="🚀")
         except Exception as e:
             st.error(f"Ocurrió un error al iniciar: {e}")
 
-# --- INTERFAZ DE CHAT ---
+# --- INTERFAZ PRINCIPAL CON PESTAÑAS ---
 
 if "process_complete" in st.session_state:
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    
+    # CREACIÓN DE LAS PESTAÑAS
+    tab1, tab2 = st.tabs(["💬 Chat Asistente", "📝 Generador de Cartas"])
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.write(message["content"])
+    # --- PESTAÑA 1: CHAT ---
+    with tab1:
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
 
-    # --- INPUT CON RESTRICCIÓN DE CARACTERES ---
-    # max_chars=1000 evita enviar textos gigantes
-    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?", max_chars=50):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.write(prompt)
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.write(message["content"])
 
-        with st.chat_message("assistant"):
-            with st.spinner("Groq pensando..."):
-                try:
-                    response = st.session_state.conversation({'question': prompt})
-                    ai_response = response['answer']
-                    st.write(ai_response)
-                    st.session_state.messages.append({"role": "assistant", "content": ai_response})
-                except Exception as e:
-                    st.error(f"Error generando respuesta: {e}")
+        if prompt := st.chat_input("Pregúntame sobre mis proyectos o experiencia...", max_chars=1000):
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.write(prompt)
 
+            with st.chat_message("assistant"):
+                with st.spinner("Procesando..."):
+                    try:
+                        response = st.session_state.conversation({'question': prompt})
+                        ai_response = response['answer']
+                        st.write(ai_response)
+                        st.session_state.messages.append({"role": "assistant", "content": ai_response})
+                    except Exception as e:
+                        st.error(f"Error: {e}")
 
+    # --- PESTAÑA 2: GENERADOR DE CANDIDATURAS ---
+    with tab2:
+        st.header("🎯 Generador de Cartas de Presentación")
+        st.markdown("""
+        Pega aquí la descripción de la oferta de trabajo (Job Description). 
+        La IA analizará **mi CV** y escribirá una carta explicando por qué soy el candidato ideal.
+        """)
+        
+        # Área de texto para la oferta
+        job_description = st.text_area("Descripción de la Oferta:", height=200, placeholder="Pega aquí los requisitos del puesto (ej: Buscamos Data Scientist con experiencia en Python...)", max_chars=3000)
+        
+        if st.button("🚀 Generar Carta Personalizada"):
+            if job_description:
+                with st.spinner("Analizando compatibilidad y redactando carta..."):
+                    try:
+                        # Prompt de ingeniería para conectar CV con la Oferta
+                        prompt_carta = f"""
+                        Actúa como yo (el candidato del CV). 
+                        Analiza esta oferta de trabajo: 
+                        ---
+                        {job_description}
+                        ---
+                        
+                        Basándote EXCLUSIVAMENTE en mi experiencia real (disponible en el contexto), redacta una carta de presentación profesional y persuasiva.
+                        1. Conecta mis habilidades específicas con los requisitos de la oferta.
+                        2. Mantén un tono profesional pero entusiasta.
+                        3. No inventes experiencia que no tenga.
+                        4. Estructura la carta claramente.
+                        """
+                        
+                        response = st.session_state.conversation({'question': prompt_carta})
+                        carta = response['answer']
+                        
+                        st.subheader("Tu Carta Generada:")
+                        st.markdown(carta)
+                        st.balloons() # ¡Efecto visual de celebración!
+                        
+                    except Exception as e:
+                        st.error(f"Error al generar: {e}")
+            else:
+                st.warning("⚠️ Por favor, pega primero la descripción de la oferta.")
