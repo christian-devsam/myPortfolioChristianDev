@@ -20,14 +20,14 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from streamlit_agraph import agraph, Node, Edge, Config
 
-# --- NUEVAS LIBRERÍAS PARA AUDIO ---
+# --- LIBRERÍAS DE AUDIO ---
 from streamlit_mic_recorder import mic_recorder
 from groq import Groq
 
 # Configuración de página
 st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡", layout="wide")
 
-# --- ESTILOS CSS (MANTENIENDO TU DISEÑO) ---
+# --- ESTILOS CSS (Sidebar Corregido) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
@@ -73,13 +73,16 @@ st.markdown("""
         box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.5);
     }
 
-    /* SIDEBAR */
+    /* --- SIDEBAR CORREGIDO (OSCURO) --- */
     [data-testid="stSidebar"] {
-        background: rgba(30, 41, 59, 0.5);
-        backdrop-filter: blur(10px);
+        background-color: rgb(15, 23, 42) !important;
         border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
-    [data-testid="stMetricLabel"] { color: #cbd5e1 !important; }
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, 
+    [data-testid="stSidebar"] span, [data-testid="stSidebar"] p, [data-testid="stSidebar"] label {
+        color: #e2e8f0 !important;
+    }
+    [data-testid="stMetricLabel"] { color: #94a3b8 !important; }
     [data-testid="stMetricValue"] { color: #f97316 !important; }
 
     /* TABS */
@@ -111,6 +114,8 @@ st.markdown("""
 if "api_calls" not in st.session_state: st.session_state.api_calls = 0
 if "total_tokens" not in st.session_state: st.session_state.total_tokens = 0
 if "last_latency" not in st.session_state: st.session_state.last_latency = 0.0
+# --- NUEVA VARIABLE PARA EVITAR BUCLES DE AUDIO ---
+if "last_audio_bytes" not in st.session_state: st.session_state.last_audio_bytes = b""
 
 st.title("⚡ Asistente IA de Christian Silva")
 st.markdown("Potenciado por **Groq (Llama 3.3 + Whisper)** + **Embeddings Locales**.")
@@ -118,7 +123,7 @@ st.markdown("Potenciado por **Groq (Llama 3.3 + Whisper)** + **Embeddings Locale
 # --- API KEY & CLIENTE GROQ ---
 try:
     api_key = st.secrets["GROQ_API_KEY"]
-    groq_client = Groq(api_key=api_key) # Cliente nativo para Audio
+    groq_client = Groq(api_key=api_key) 
 except FileNotFoundError:
     st.error("⚠️ No se encontró la GROQ_API_KEY.")
     st.stop()
@@ -206,11 +211,9 @@ if "process_complete" in st.session_state:
     with tab1:
         st.markdown("### 🗣️ Habla o Escribe")
         
-        # COLUMNAS PARA EL MICRÓFONO
         c1, c2 = st.columns([1, 6])
         with c1:
             st.write("Grabar:")
-            # Widget de grabación
             audio = mic_recorder(start_prompt="🎤", stop_prompt="⏹️", key='recorder')
         with c2:
             st.info("Presiona el micrófono para preguntar por voz. Groq Whisper lo transcribirá al instante.")
@@ -219,21 +222,28 @@ if "process_complete" in st.session_state:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]): st.write(message["content"])
 
-        # LÓGICA DE ENTRADA (VOZ O TEXTO)
+        # LÓGICA CORREGIDA PARA EVITAR BUCLES
         prompt = None
         
-        # 1. ¿Hay audio nuevo?
+        # 1. ¿Hay audio en el widget?
         if audio:
-            with st.spinner("Transcribiendo audio con Whisper..."):
-                transcription = transcribe_audio(audio['bytes'])
-                if transcription:
-                    prompt = transcription
+            # 2. ¿Es un audio NUEVO que no hemos procesado antes?
+            if audio['bytes'] != st.session_state.last_audio_bytes:
+                st.session_state.last_audio_bytes = audio['bytes'] # Marcamos como procesado
+                
+                with st.spinner("Transcribiendo audio con Whisper..."):
+                    transcription = transcribe_audio(audio['bytes'])
+                    if transcription:
+                        prompt = transcription
+            else:
+                # Si el audio es el mismo de antes, NO hacemos nada (evita el bucle)
+                pass
         
-        # 2. Si no hay audio, ¿hay texto?
+        # 3. Si no hay audio nuevo, miramos la caja de texto
         if not prompt:
             prompt = st.chat_input("Escribe tu pregunta aquí...", max_chars=1000)
 
-        # PROCESAR CUALQUIERA DE LOS DOS
+        # 4. Procesamos
         if prompt:
             st.session_state.messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"): st.write(prompt)
@@ -248,9 +258,9 @@ if "process_complete" in st.session_state:
                         st.write(ai_response)
                         st.session_state.messages.append({"role": "assistant", "content": ai_response})
                         
-                        # Solo hacemos rerun si vino del audio para limpiar el buffer
-                        if audio: 
-                            time.sleep(0.5) # Pequeña pausa para ver el resultado
+                        # Si fue por audio, recargamos para limpiar estados visuales
+                        if audio:
+                            time.sleep(0.5)
                             st.rerun()
                             
                     except Exception as e: st.error(f"Error: {e}")
@@ -268,7 +278,6 @@ if "process_complete" in st.session_state:
                     ai_response = response['answer']
                     update_metrics(start_time, len(prompt_carta), len(ai_response))
                     st.subheader("Carta Generada:"); st.markdown(ai_response); st.balloons()
-
     # --- PESTAÑA 3: GRAFO ---
     with tab3:
         st.header("Mapa de Habilidades")
@@ -318,4 +327,5 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
 
