@@ -527,3 +527,91 @@ footer { text-align: center; padding: 40px; color: var(--text-secondary); font-s
     50% { opacity: 0.5; }
     100% { opacity: 1; }
 }
+/* --- HERO SECTION --- */
+#hero {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Ocupa toda la pantalla */
+    background: #0f172a; /* Azul oscuro profundo (mismo de tu Streamlit) */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* El lienzo de partículas */
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Detrás del texto */
+}
+
+/* El contenido sobre las partículas */
+.hero-content {
+    position: relative;
+    z-index: 2; /* Delante de las partículas */
+    text-align: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.6); /* Fondo semi-transparente para leer mejor */
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Foto de Perfil */
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #f97316; /* Naranja Groq */
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.5); /* Resplandor */
+    margin-bottom: 20px;
+}
+
+/* Tipografía */
+h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* Máquina de Escribir */
+.typewriter-container {
+    font-size: 1.5rem;
+    color: #38bdf8; /* Azul Cian */
+    font-family: 'Courier New', monospace; /* Fuente monoespaciada */
+    margin-bottom: 20px;
+    height: 30px; /* Evita saltos de linea */
+}
+.cursor {
+    animation: blink 1s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Botón Neón */
+.neon-button {
+    display: inline-block;
+    padding: 12px 30px;
+    color: #f97316;
+    border: 2px solid #f97316;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+    background: transparent;
+    margin-top: 20px;
+    letter-spacing: 1px;
+}
+
+.neon-button:hover {
+    background: #f97316;
+    color: white;
+    box-shadow: 0 0 20px #f97316, 0 0 40px #f97316; /* Doble sombra para más brillo */
+    transform: scale(1.05);
+}
