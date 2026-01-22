@@ -18,6 +18,9 @@ from langchain.memory import ConversationBufferMemory
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 
+# --- IMPORTACIÓN PARA EL GRAFO ---
+from streamlit_agraph import agraph, Node, Edge, Config
+
 # Configuración de página
 st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡", layout="wide")
 
@@ -65,12 +68,12 @@ st.markdown("""
         border-radius: 10px;
     }
     
-    /* INPUTS (Chat y Text Area) */
+    /* INPUTS */
     .stTextInput input, .stChatInput textarea, .stTextArea textarea { 
         background-color: #1e293b !important;
         color: #ffffff !important;
         border: 1px solid #334155;
-        caret-color: #ffffff;
+        caret-color: #f97316;
     }
     
     /* Botones */
@@ -167,8 +170,8 @@ if "conversation" not in st.session_state:
 
 if "process_complete" in st.session_state:
     
-    # CREACIÓN DE LAS PESTAÑAS
-    tab1, tab2 = st.tabs(["💬 Chat Asistente", "📝 Generador de Cartas"])
+    # CREACIÓN DE 3 PESTAÑAS
+    tab1, tab2, tab3 = st.tabs(["💬 Chat Asistente", "📝 Generador de Cartas", "🕸️ Mapa de Habilidades"])
 
     # --- PESTAÑA 1: CHAT ---
     with tab1:
@@ -197,42 +200,79 @@ if "process_complete" in st.session_state:
     # --- PESTAÑA 2: GENERADOR DE CANDIDATURAS ---
     with tab2:
         st.header("🎯 Generador de Cartas de Presentación")
-        st.markdown("""
-        Pega aquí la descripción de la oferta de trabajo (Job Description). 
-        La IA analizará **mi CV** y escribirá una carta explicando por qué soy el candidato ideal.
-        """)
+        st.markdown("Pega aquí la descripción de la oferta y generaré una carta personalizada basada en mi CV.")
         
-        # Área de texto para la oferta
-        job_description = st.text_area("Descripción de la Oferta:", height=200, placeholder="Pega aquí los requisitos del puesto (ej: Buscamos Data Scientist con experiencia en Python...)", max_chars=3000)
+        job_description = st.text_area("Descripción de la Oferta:", height=200, placeholder="Pega aquí los requisitos del puesto...", max_chars=3000)
         
         if st.button("🚀 Generar Carta Personalizada"):
             if job_description:
-                with st.spinner("Analizando compatibilidad y redactando carta..."):
+                with st.spinner("Redactando..."):
                     try:
-                        # Prompt de ingeniería para conectar CV con la Oferta
-                        prompt_carta = f"""
-                        Actúa como yo (el candidato del CV). 
-                        Analiza esta oferta de trabajo: 
-                        ---
-                        {job_description}
-                        ---
-                        
-                        Basándote EXCLUSIVAMENTE en mi experiencia real (disponible en el contexto), redacta una carta de presentación profesional y persuasiva.
-                        1. Conecta mis habilidades específicas con los requisitos de la oferta.
-                        2. Mantén un tono profesional pero entusiasta.
-                        3. No inventes experiencia que no tenga.
-                        4. Estructura la carta claramente.
-                        """
-                        
+                        prompt_carta = f"Actúa como el candidato. Analiza esta oferta: {job_description}. Basado en mi CV (contexto), escribe una carta de presentación persuasiva."
                         response = st.session_state.conversation({'question': prompt_carta})
-                        carta = response['answer']
-                        
                         st.subheader("Tu Carta Generada:")
-                        st.markdown(carta)
-                        st.balloons() # ¡Efecto visual de celebración!
-                        
+                        st.markdown(response['answer'])
+                        st.balloons()
                     except Exception as e:
-                        st.error(f"Error al generar: {e}")
+                        st.error(f"Error: {e}")
             else:
-                st.warning("⚠️ Por favor, pega primero la descripción de la oferta.")
+                st.warning("⚠️ Pega la descripción de la oferta primero.")
 
+    # --- PESTAÑA 3: GRAFO DE CONOCIMIENTO ---
+    with tab3:
+        st.header("🕸️ Mapa de Habilidades Interactivo")
+        st.markdown("Explora mis conexiones técnicas. ¡Puedes arrastrar los nodos!")
+        
+        # Definición de Nodos (Skillset)
+        # Puedes editar esto para que coincida exactamente con tus habilidades
+        nodes = []
+        edges = []
+        
+        # Nodo Central
+        nodes.append(Node(id="Yo", label="Christian Silva", size=40, color="#f97316")) # Naranja Groq
+        
+        # Categoría: Data Science & AI (Azul)
+        nodes.append(Node(id="AI", label="Artificial Intelligence", color="#3b82f6"))
+        nodes.append(Node(id="ML", label="Machine Learning", color="#3b82f6"))
+        nodes.append(Node(id="RAG", label="RAG Systems", color="#3b82f6"))
+        nodes.append(Node(id="NLP", label="NLP", color="#3b82f6"))
+        
+        edges.append(Edge(source="Yo", target="AI", label="Especialidad"))
+        edges.append(Edge(source="AI", target="ML", label="Core"))
+        edges.append(Edge(source="AI", target="RAG", label="Implementación"))
+        edges.append(Edge(source="AI", target="NLP", label="Uso"))
+
+        # Categoría: Lenguajes & Tools (Verde)
+        nodes.append(Node(id="Py", label="Python", color="#10b981"))
+        nodes.append(Node(id="SQL", label="SQL", color="#10b981"))
+        nodes.append(Node(id="St", label="Streamlit", color="#10b981"))
+        nodes.append(Node(id="Git", label="Git/GitHub", color="#10b981"))
+        
+        edges.append(Edge(source="Yo", target="Py", label="Experto"))
+        edges.append(Edge(source="Yo", target="SQL", label="Avanzado"))
+        edges.append(Edge(source="Py", target="St", label="Framework"))
+        edges.append(Edge(source="Py", target="AI", label="Base"))
+
+        # Categoría: Soft Skills (Violeta)
+        nodes.append(Node(id="Com", label="Comunicación", color="#8b5cf6"))
+        nodes.append(Node(id="Led", label="Liderazgo", color="#8b5cf6"))
+        nodes.append(Node(id="Prob", label="Resolución Problemas", color="#8b5cf6"))
+        
+        edges.append(Edge(source="Yo", target="Com", label="Soft Skill"))
+        edges.append(Edge(source="Yo", target="Led", label="Soft Skill"))
+        edges.append(Edge(source="Yo", target="Prob", label="Enfoque"))
+
+        # Configuración del Grafo
+        config = Config(
+            width=800,
+            height=500,
+            directed=True, 
+            physics=True, 
+            hierarchical=False,
+            nodeHighlightBehavior=True,
+            highlightColor="#F7A7A6",
+            collapsible=False
+        )
+        
+        # Renderizar el grafo
+        return_value = agraph(nodes=nodes, edges=edges, config=config)
