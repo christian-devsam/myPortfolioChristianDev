@@ -1,6 +1,7 @@
 import streamlit as st
 import asyncio
 import os
+import time  # <--- NUEVO: Para medir el tiempo de respuesta
 
 # --- PARCHE PARA EL EVENT LOOP ---
 try:
@@ -17,8 +18,6 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
-
-# --- IMPORTACIÓN PARA EL GRAFO ---
 from streamlit_agraph import agraph, Node, Edge, Config
 
 # Configuración de página
@@ -28,14 +27,10 @@ st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡", layou
 st.markdown("""
 <style>
     /* Fondo oscuro global */
-    .stApp { 
-        background-color: #0f172a; 
-    }
+    .stApp { background-color: #0f172a; }
     
     /* Títulos en naranja Groq */
-    h1, h2, h3 { 
-        color: #f97316 !important; 
-    }
+    h1, h2, h3 { color: #f97316 !important; }
     
     /* TEXTO BLANCO Y LEGIBLE */
     .stMarkdown p, .stMarkdown li, .stText, p {
@@ -45,9 +40,7 @@ st.markdown("""
     }
     
     /* Pestañas (Tabs) */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 10px;
-    }
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
     .stTabs [data-baseweb="tab"] {
         height: 50px;
         white-space: pre-wrap;
@@ -59,6 +52,11 @@ st.markdown("""
     .stTabs [aria-selected="true"] {
         background-color: #f97316 !important;
         color: white !important;
+    }
+    
+    /* Mtricas en Sidebar */
+    [data-testid="stMetricValue"] {
+        color: #f97316 !important;
     }
     
     /* Cajitas de los mensajes */
@@ -92,6 +90,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# --- INICIALIZACIÓN DE VARIABLES DE ESTADO (MÉTRICAS) ---
+if "api_calls" not in st.session_state:
+    st.session_state.api_calls = 0
+if "total_tokens" not in st.session_state:
+    st.session_state.total_tokens = 0
+if "last_latency" not in st.session_state:
+    st.session_state.last_latency = 0.0
+
 st.title("⚡ Asistente IA de Christian Silva")
 st.write("Potenciado por **Groq (Llama 3.3)** + **Embeddings Locales**.")
 
@@ -101,6 +107,27 @@ try:
 except FileNotFoundError:
     st.error("⚠️ No se encontró la GROQ_API_KEY. Configura los 'Secrets' en Streamlit Cloud.")
     st.stop()
+
+# --- SIDEBAR: DASHBOARD DE INGENIERÍA ---
+with st.sidebar:
+    st.header("📊 Métricas de Ingeniería")
+    st.markdown("---")
+    
+    # Métricas en tiempo real
+    col1, col2 = st.columns(2)
+    col1.metric("Llamadas API", st.session_state.api_calls)
+    col2.metric("Latencia (s)", f"{st.session_state.last_latency:.2f}s")
+    
+    st.metric("Tokens Procesados (Est.)", st.session_state.total_tokens)
+    
+    # Cálculo ficticio de ahorro vs GPT-4 ($30/millón tokens vs casi gratis)
+    savings = (st.session_state.total_tokens / 1000) * 0.03 
+    st.metric("Ahorro de Costos vs GPT-4", f"${savings:.4f}")
+    
+    st.markdown("---")
+    st.markdown("**Stack Tecnológico:**")
+    st.code("Python 3.11\nLangChain\nGroq LPU\nFAISS (Vector DB)\nStreamlit", language="text")
+    st.caption("Este dashboard demuestra observabilidad en tiempo real.")
 
 # --- FUNCIONES ---
 
@@ -153,6 +180,15 @@ def get_conversation_chain(vectorstore):
     )
     return chain
 
+# Función auxiliar para actualizar métricas
+def update_metrics(start_time, prompt_len, response_len):
+    end_time = time.time()
+    st.session_state.last_latency = end_time - start_time
+    st.session_state.api_calls += 1
+    # Estimación simple: 1 token ~= 4 caracteres
+    estimated_tokens = (prompt_len + response_len) // 4
+    st.session_state.total_tokens += estimated_tokens
+
 # --- INICIALIZACIÓN ---
 
 if "conversation" not in st.session_state:
@@ -170,7 +206,6 @@ if "conversation" not in st.session_state:
 
 if "process_complete" in st.session_state:
     
-    # CREACIÓN DE 3 PESTAÑAS
     tab1, tab2, tab3 = st.tabs(["💬 Chat Asistente", "📝 Generador de Cartas", "🕸️ Mapa de Habilidades"])
 
     # --- PESTAÑA 1: CHAT ---
@@ -190,10 +225,20 @@ if "process_complete" in st.session_state:
             with st.chat_message("assistant"):
                 with st.spinner("Procesando..."):
                     try:
+                        start_time = time.time() # Inicia cronómetro
+                        
                         response = st.session_state.conversation({'question': prompt})
                         ai_response = response['answer']
+                        
+                        # Actualizar métricas
+                        update_metrics(start_time, len(prompt), len(ai_response))
+                        
                         st.write(ai_response)
                         st.session_state.messages.append({"role": "assistant", "content": ai_response})
+                        
+                        # Forzar actualización de la sidebar
+                        st.rerun() 
+                        
                     except Exception as e:
                         st.error(f"Error: {e}")
 
@@ -208,11 +253,22 @@ if "process_complete" in st.session_state:
             if job_description:
                 with st.spinner("Redactando..."):
                     try:
+                        start_time = time.time() # Inicia cronómetro
+                        
                         prompt_carta = f"Actúa como el candidato. Analiza esta oferta: {job_description}. Basado en mi CV (contexto), escribe una carta de presentación persuasiva."
                         response = st.session_state.conversation({'question': prompt_carta})
+                        ai_response = response['answer']
+                        
+                        # Actualizar métricas
+                        update_metrics(start_time, len(prompt_carta), len(ai_response))
+                        
                         st.subheader("Tu Carta Generada:")
-                        st.markdown(response['answer'])
+                        st.markdown(ai_response)
                         st.balloons()
+                        
+                        # Nota: Aquí no hacemos st.rerun() completo para no borrar la carta generada, 
+                        # pero las métricas se actualizarán en la siguiente interacción.
+                        
                     except Exception as e:
                         st.error(f"Error: {e}")
             else:
@@ -223,46 +279,36 @@ if "process_complete" in st.session_state:
         st.header("🕸️ Mapa de Habilidades Interactivo")
         st.markdown("Explora mis conexiones técnicas. ¡Puedes arrastrar los nodos!")
         
-        # Definición de Nodos (Skillset)
-        # Puedes editar esto para que coincida exactamente con tus habilidades
         nodes = []
         edges = []
         
-        # Nodo Central
-        nodes.append(Node(id="Yo", label="Christian Silva", size=40, color="#f97316")) # Naranja Groq
-        
-        # Categoría: Data Science & AI (Azul)
+        # Nodos
+        nodes.append(Node(id="Yo", label="Christian Silva", size=40, color="#f97316"))
         nodes.append(Node(id="AI", label="Artificial Intelligence", color="#3b82f6"))
         nodes.append(Node(id="ML", label="Machine Learning", color="#3b82f6"))
         nodes.append(Node(id="RAG", label="RAG Systems", color="#3b82f6"))
         nodes.append(Node(id="NLP", label="NLP", color="#3b82f6"))
-        
-        edges.append(Edge(source="Yo", target="AI", label="Especialidad"))
-        edges.append(Edge(source="AI", target="ML", label="Core"))
-        edges.append(Edge(source="AI", target="RAG", label="Implementación"))
-        edges.append(Edge(source="AI", target="NLP", label="Uso"))
-
-        # Categoría: Lenguajes & Tools (Verde)
         nodes.append(Node(id="Py", label="Python", color="#10b981"))
         nodes.append(Node(id="SQL", label="SQL", color="#10b981"))
         nodes.append(Node(id="St", label="Streamlit", color="#10b981"))
         nodes.append(Node(id="Git", label="Git/GitHub", color="#10b981"))
-        
-        edges.append(Edge(source="Yo", target="Py", label="Experto"))
-        edges.append(Edge(source="Yo", target="SQL", label="Avanzado"))
-        edges.append(Edge(source="Py", target="St", label="Framework"))
-        edges.append(Edge(source="Py", target="AI", label="Base"))
-
-        # Categoría: Soft Skills (Violeta)
         nodes.append(Node(id="Com", label="Comunicación", color="#8b5cf6"))
         nodes.append(Node(id="Led", label="Liderazgo", color="#8b5cf6"))
         nodes.append(Node(id="Prob", label="Resolución Problemas", color="#8b5cf6"))
         
+        # Aristas
+        edges.append(Edge(source="Yo", target="AI", label="Especialidad"))
+        edges.append(Edge(source="AI", target="ML", label="Core"))
+        edges.append(Edge(source="AI", target="RAG", label="Implementación"))
+        edges.append(Edge(source="AI", target="NLP", label="Uso"))
+        edges.append(Edge(source="Yo", target="Py", label="Experto"))
+        edges.append(Edge(source="Yo", target="SQL", label="Avanzado"))
+        edges.append(Edge(source="Py", target="St", label="Framework"))
+        edges.append(Edge(source="Py", target="AI", label="Base"))
         edges.append(Edge(source="Yo", target="Com", label="Soft Skill"))
         edges.append(Edge(source="Yo", target="Led", label="Soft Skill"))
         edges.append(Edge(source="Yo", target="Prob", label="Enfoque"))
 
-        # Configuración del Grafo
         config = Config(
             width=800,
             height=500,
@@ -274,5 +320,4 @@ if "process_complete" in st.session_state:
             collapsible=False
         )
         
-        # Renderizar el grafo
         return_value = agraph(nodes=nodes, edges=edges, config=config)
