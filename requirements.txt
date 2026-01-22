@@ -9,3 +9,5 @@ faiss-cpu
 sentence-transformers
 tiktoken
 streamlit-agraph==0.0.45
+streamlit-mic-recorder==0.0.8
+groq==0.9.0
