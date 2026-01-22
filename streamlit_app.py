@@ -2,7 +2,7 @@ import streamlit as st
 import asyncio
 import os
 import time
-import hashlib  # <--- NUEVA IMPORTACIÓN CRÍTICA
+import hashlib
 
 # --- PARCHE PARA EL EVENT LOOP ---
 try:
@@ -115,7 +115,6 @@ st.markdown("""
 if "api_calls" not in st.session_state: st.session_state.api_calls = 0
 if "total_tokens" not in st.session_state: st.session_state.total_tokens = 0
 if "last_latency" not in st.session_state: st.session_state.last_latency = 0.0
-# --- NUEVA VARIABLE DE CONTROL DE AUDIO ---
 if "last_audio_hash" not in st.session_state: st.session_state.last_audio_hash = None
 
 st.title("⚡ Asistente IA de Christian Silva")
@@ -212,59 +211,62 @@ if "process_complete" in st.session_state:
     with tab1:
         st.markdown("### 🗣️ Habla o Escribe")
         
+        # --- ZONA DE AUDIO ---
+        # Definimos columnas para que el micro no ocupe todo el ancho
         c1, c2 = st.columns([1, 6])
         with c1:
             st.write("Grabar:")
             audio = mic_recorder(start_prompt="🎤", stop_prompt="⏹️", key='recorder')
         with c2:
-            st.info("Presiona el micrófono para preguntar por voz. Groq Whisper lo transcribirá al instante.")
+            st.info("Puedes usar el micrófono O escribir abajo. Ambos funcionan.")
 
+        # --- HISTORIAL DE CHAT ---
         if "messages" not in st.session_state: st.session_state.messages = []
         for message in st.session_state.messages:
             with st.chat_message(message["role"]): st.write(message["content"])
 
-        # --- LÓGICA ANTI-BUCLE (HASH) ---
-        prompt = None
+        # --- ZONA DE TEXTO (Siempre Visible) ---
+        # Capturamos el input de texto en una variable
+        text_input = st.chat_input("Escribe tu pregunta aquí...", max_chars=1000)
+
+        # --- LÓGICA DE UNIFICACIÓN ---
+        final_prompt = None
         
+        # 1. Prioridad: ¿Hay audio NUEVO?
         if audio:
-            # 1. Crear Huella Digital del Audio
             audio_hash = hashlib.md5(audio['bytes']).hexdigest()
-            
-            # 2. Verificar si es un audio NUEVO
             if audio_hash != st.session_state.last_audio_hash:
-                st.session_state.last_audio_hash = audio_hash # Guardar estado INMEDIATAMENTE
-                
-                with st.spinner("Transcribiendo audio con Whisper..."):
+                st.session_state.last_audio_hash = audio_hash
+                with st.spinner("Transcribiendo audio..."):
                     transcription = transcribe_audio(audio['bytes'])
                     if transcription:
-                        prompt = transcription
-            else:
-                # Si el hash es igual, no hacemos NADA (rompe el bucle)
-                pass
+                        final_prompt = transcription
         
-        # 3. Input de Texto (Backup)
-        if not prompt:
-            prompt = st.chat_input("Escribe tu pregunta aquí...", max_chars=1000)
+        # 2. Si no hubo audio nuevo, ¿Hay texto escrito?
+        if not final_prompt and text_input:
+            final_prompt = text_input
 
-        # 4. Procesamiento
-        if prompt:
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            with st.chat_message("user"): st.write(prompt)
+        # --- PROCESAMIENTO CENTRALIZADO ---
+        if final_prompt:
+            st.session_state.messages.append({"role": "user", "content": final_prompt})
+            with st.chat_message("user"): st.write(final_prompt)
 
             with st.chat_message("assistant"):
                 with st.spinner("Pensando..."):
                     try:
                         start_time = time.time()
-                        response = st.session_state.conversation({'question': prompt})
+                        response = st.session_state.conversation({'question': final_prompt})
                         ai_response = response['answer']
-                        update_metrics(start_time, len(prompt), len(ai_response))
+                        update_metrics(start_time, len(final_prompt), len(ai_response))
                         st.write(ai_response)
                         st.session_state.messages.append({"role": "assistant", "content": ai_response})
                         
-                        # --- IMPORTANTE: ELIMINAMOS ST.RERUN() ---
-                        # Al quitar el rerun, evitamos que el script se reinicie y vuelva a leer el audio antiguo.
-                        # El mensaje ya se mostró arriba con st.write(), así que el usuario lo ve al instante.
-                            
+                        # IMPORTANTE: Si usamos audio, forzamos un rerun suave para limpiar estados visuales
+                        # Si usamos texto, st.chat_input limpia solo.
+                        if audio and final_prompt == transcription: # Solo si vino del audio
+                             time.sleep(0.5)
+                             st.rerun()
+
                     except Exception as e: st.error(f"Error: {e}")
 
     # --- PESTAÑA 2: CARTAS ---
@@ -280,6 +282,7 @@ if "process_complete" in st.session_state:
                     ai_response = response['answer']
                     update_metrics(start_time, len(prompt_carta), len(ai_response))
                     st.subheader("Carta Generada:"); st.markdown(ai_response); st.balloons()
+
     # --- PESTAÑA 3: GRAFO ---
     with tab3:
         st.header("Mapa de Habilidades")
@@ -329,6 +332,7 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
 
 
 
