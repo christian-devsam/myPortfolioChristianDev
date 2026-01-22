@@ -70,7 +70,7 @@ st.markdown("""
         background-color: #1e293b !important;
         color: #ffffff !important;
         border: 1px solid #334155;
-        caret-color: #f97316;
+        caret-color: #ffffff;
     }
     
     /* Botones */
@@ -235,3 +235,4 @@ if "process_complete" in st.session_state:
                         st.error(f"Error al generar: {e}")
             else:
                 st.warning("⚠️ Por favor, pega primero la descripción de la oferta.")
+
