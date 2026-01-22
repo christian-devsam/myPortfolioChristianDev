@@ -8,3 +8,4 @@ pypdf
 faiss-cpu
 sentence-transformers
 tiktoken
+streamlit-agraph==0.0.45
