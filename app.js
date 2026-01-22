@@ -105,3 +105,61 @@ function cargarAnimaciones(){
 window.onscroll = function(){
     efectoHabilidades();
 }
+
+<script>
+    // 1. CONFIGURACIÓN DE PARTICLES.JS (RED NEURONAL)
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#ffffff" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5, "random": false },
+            "size": { "value": 3, "random": true },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#f97316", // Color de las lineas (Naranja)
+                "opacity": 0.4,
+                "width": 1
+            },
+            "move": { "enable": true, "speed": 4, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": { "enable": true, "mode": "grab" }, // Efecto de conectar con el mouse
+                "onclick": { "enable": true, "mode": "push" },
+                "resize": true
+            },
+            "modes": {
+                "grab": { "distance": 140, "line_linked": { "opacity": 1 } }
+            }
+        },
+        "retina_detect": true
+    });
+
+    // 2. EFECTO TYPEWRITER (MÁQUINA DE ESCRIBIR)
+    const texts = ["Data Engineer", "Cloud Specialist", "GenAI Developer", "Automation Expert"];
+    let count = 0;
+    let index = 0;
+    let currentText = "";
+    let letter = "";
+
+    (function type() {
+        if (count === texts.length) {
+            count = 0; // Reiniciar bucle
+        }
+        currentText = texts[count];
+        letter = currentText.slice(0, ++index);
+
+        document.getElementById("typewriter-text").textContent = letter;
+
+        if (letter.length === currentText.length) {
+            count++;
+            index = 0;
+            setTimeout(type, 2000); // Esperar 2 segundos antes de borrar/cambiar
+        } else {
+            setTimeout(type, 100); // Velocidad de escritura
+        }
+    })();
+</script>
