@@ -280,7 +280,7 @@ if "process_complete" in st.session_state:
             with st.chat_message(message["role"]):
                 st.write(message["content"])
 
-        if prompt := st.chat_input("Escribe tu pregunta aquí...", max_chars=1000):
+        if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?.", max_chars=1000):
             st.session_state.messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"):
                 st.write(prompt)
@@ -372,3 +372,4 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
