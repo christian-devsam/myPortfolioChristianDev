@@ -10,5 +10,5 @@ sentence-transformers
 tiktoken
 streamlit-agraph
 streamlit-mic-recorder
-groq==0.11.0
+groq==0.18.0
 httpx==0.27.2
