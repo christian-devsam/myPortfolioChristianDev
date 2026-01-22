@@ -272,15 +272,49 @@ if "process_complete" in st.session_state:
     # --- PESTAÑA 3: GRAFO ---
     with tab3:
         st.header("Mapa de Habilidades")
-        nodes = [
-            Node(id="Yo", label="Christian Silva", size=45, color="#f97316", shape="circularImage", image="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"),
-            Node(id="AI", label="AI & LLMs", color="#3b82f6"), Node(id="Py", label="Python", color="#10b981"),
-            Node(id="Data", label="Data Eng.", color="#10b981"), Node(id="St", label="Streamlit", color="#10b981"),
-            Node(id="RAG", label="RAG", color="#3b82f6"), Node(id="Soft", label="Soft Skills", color="#f59e0b")
-        ]
-        edges = [
-            Edge(source="Yo", target="AI"), Edge(source="Yo", target="Py"), Edge(source="Py", target="St"),
-            Edge(source="AI", target="RAG"), Edge(source="Py", target="Data"), Edge(source="Yo", target="Soft")
-        ]
-        config = Config(width=900, height=600, directed=True, physics=True, highlightColor="#f97316")
+        
+        nodes = []
+        edges = []
+        
+        # Nodos
+        nodes.append(Node(id="Yo", label="Christian Silva", size=45, color="#f97316", shape="circularImage", image="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"))
+        nodes.append(Node(id="AI", label="Artificial Intelligence", color="#3b82f6", size=30))
+        nodes.append(Node(id="ML", label="Machine Learning", color="#3b82f6"))
+        nodes.append(Node(id="RAG", label="RAG Systems", color="#3b82f6"))
+        nodes.append(Node(id="NLP", label="NLP & LLMs", color="#3b82f6"))
+        nodes.append(Node(id="Py", label="Python Ecosystem", color="#10b981", size=30))
+        nodes.append(Node(id="Data", label="Data Engineering", color="#10b981"))
+        nodes.append(Node(id="SQL", label="SQL & Databases", color="#10b981"))
+        nodes.append(Node(id="St", label="Streamlit / Web", color="#10b981"))
+        nodes.append(Node(id="Cloud", label="Cloud Services", color="#8b5cf6", size=25))
+        nodes.append(Node(id="Soft", label="Soft Skills", color="#f59e0b", size=25))
+        nodes.append(Node(id="Com", label="Comunicación", color="#f59e0b"))
+        nodes.append(Node(id="Prob", label="Resolución de Problemas", color="#f59e0b"))
+
+        # Aristas
+        edges.append(Edge(source="Yo", target="AI", label="Especialidad"))
+        edges.append(Edge(source="Yo", target="Py", label="Core"))
+        edges.append(Edge(source="AI", target="ML", label="Base"))
+        edges.append(Edge(source="AI", target="RAG", label="Implementa"))
+        edges.append(Edge(source="AI", target="NLP", label="Usa"))
+        edges.append(Edge(source="Py", target="Data", label="Aplica"))
+        edges.append(Edge(source="Py", target="St", label="Crea"))
+        edges.append(Edge(source="Data", target="SQL", label="Consulta"))
+        edges.append(Edge(source="Yo", target="Cloud", label="Despliega"))
+        edges.append(Edge(source="Yo", target="Soft", label="Posee"))
+        edges.append(Edge(source="Soft", target="Com", label="Clave"))
+        edges.append(Edge(source="Soft", target="Prob", label="Enfoque"))
+
+        config = Config(
+            width=900,
+            height=600,
+            directed=True, 
+            physics=True, 
+            hierarchical=False,
+            nodeHighlightBehavior=True,
+            highlightColor="#f97316",
+            collapsible=False,
+            node={'labelProperty': 'label', 'renderLabel': True}
+        )
+        
         agraph(nodes=nodes, edges=edges, config=config)
