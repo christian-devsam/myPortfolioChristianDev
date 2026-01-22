@@ -616,3 +616,27 @@ h1 {
     box-shadow: 0 0 20px #f97316, 0 0 40px #f97316; /* Doble sombra para más brillo */
     transform: scale(1.05);
 }
+
+section, footer, .inicio, .sobre-mi, .skills, .portfolio, .contacto {
+    background-color: transparent !important; /* Forza la transparencia */
+    position: relative; /* Mantiene el contenido organizado */
+}
+
+.contenido-seccion, .col-texto, .col-badge, .skill, .proyecto, .col-info, .col-form {
+    background: rgba(30, 41, 59, 0.7); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(10px); /* Efecto borroso detrás */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px; /* Espacio interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Sombra */
+    color: #e2e8f0; /* Texto claro para que se lea sobre oscuro */
+}
+
+
+h1, h2, h3, h4, p, span, i {
+    color: #ffffff !important; /* Fuerza el texto a blanco */
+}
+
+.percent, .tech-tags, i.fa-brain {
+    color: #f97316 !important;
+}
