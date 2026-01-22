@@ -1,7 +1,7 @@
 import streamlit as st
 import asyncio
 import os
-import time  # <--- NUEVO: Para medir el tiempo de respuesta
+import time
 
 # --- PARCHE PARA EL EVENT LOOP ---
 try:
@@ -23,74 +23,137 @@ from streamlit_agraph import agraph, Node, Edge, Config
 # Configuración de página
 st.set_page_config(page_title="Chat con Christian Silva", page_icon="⚡", layout="wide")
 
-# --- ESTILOS CSS PERSONALIZADOS ---
+# --- ESTILOS CSS MEJORADOS ---
 st.markdown("""
 <style>
-    /* Fondo oscuro global */
-    .stApp { background-color: #0f172a; }
-    
-    /* Títulos en naranja Groq */
-    h1, h2, h3 { color: #f97316 !important; }
-    
-    /* TEXTO BLANCO Y LEGIBLE */
-    .stMarkdown p, .stMarkdown li, .stText, p {
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    /* FONDO GLOBAL CON DEGRADADO */
+    .stApp {
+        background: radial-gradient(circle at 10% 20%, rgb(15, 23, 42) 0%, rgb(10, 15, 30) 90%);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* TÍTULOS */
+    h1, h2, h3 {
         color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+    h1 {
+        background: -webkit-linear-gradient(45deg, #f97316, #facc15);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3rem !important;
+    }
+
+    /* TEXTO GENERAL */
+    .stMarkdown p, .stMarkdown li, .stText, p, label {
+        color: #e2e8f0 !important;
         font-size: 1.05rem;
-        line-height: 1.6;
+        line-height: 1.7;
     }
-    
-    /* Pestañas (Tabs) */
-    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
-    .stTabs [data-baseweb="tab"] {
-        height: 50px;
-        white-space: pre-wrap;
-        background-color: #1e293b;
-        border-radius: 5px;
-        color: #ffffff;
-        font-weight: 600;
+
+    /* --- BARRA LATERAL (SIDEBAR) --- */
+    [data-testid="stSidebar"] {
+        background: rgba(30, 41, 59, 0.5); /* Transparente */
+        backdrop-filter: blur(10px);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .stTabs [aria-selected="true"] {
-        background-color: #f97316 !important;
-        color: white !important;
-    }
-    
-    /* Mtricas en Sidebar */
-    [data-testid="stMetricValue"] {
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
         color: #f97316 !important;
     }
-    
-    /* Cajitas de los mensajes */
-    .stChatMessage { 
-        background-color: #1e293b; 
-        border: 1px solid #334155;
+    [data-testid="stMetricLabel"] {
+        color: #94a3b8 !important;
+        font-size: 0.9rem !important;
+    }
+    [data-testid="stMetricValue"] {
+        color: #f97316 !important;
+        font-size: 1.8rem !important;
+        font-weight: 700;
+    }
+
+    /* --- PESTAÑAS (TABS) --- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 12px;
+        background-color: transparent;
+        padding: 10px 0;
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: 55px;
+        white-space: pre-wrap;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #ffffff;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #f97316;
+        transform: translateY(-2px);
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+        color: white !important;
+        border: none;
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    }
+
+    /* --- CHAT & INPUTS --- */
+    .stChatMessage {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    /* Input de Chat */
+    .stChatInput textarea {
+        background-color: rgba(30, 41, 59, 0.8) !important;
+        color: #ffffff !important;
+        border: 2px solid rgba(249, 115, 22, 0.3) !important;
+        border-radius: 12px;
+        caret-color: #f97316;
+        padding: 15px !important;
+    }
+    .stChatInput textarea:focus {
+        border-color: #f97316 !important;
+        box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+    }
+    /* Área de Texto Normal */
+    .stTextArea textarea {
+        background-color: rgba(30, 41, 59, 0.8) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 10px;
     }
-    
-    /* INPUTS */
-    .stTextInput input, .stChatInput textarea, .stTextArea textarea { 
-        background-color: #1e293b !important;
-        color: #ffffff !important;
-        border: 1px solid #334155;
-        caret-color: #f97316;
-    }
-    
-    /* Botones */
+
+    /* --- BOTONES --- */
     .stButton button {
-        background-color: #f97316;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
         color: white;
-        font-weight: bold;
+        font-weight: 700;
         border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
+        padding: 0.7rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+        transition: all 0.3s ease;
     }
     .stButton button:hover {
-        background-color: #ea580c;
-        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+    }
+
+    /* --- NOTIFICACIONES (TOAST) --- */
+    .stToast {
+        background-color: rgba(30, 41, 59, 0.9) !important;
+        border: 1px solid #f97316 !important;
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- INICIALIZACIÓN DE VARIABLES DE ESTADO (MÉTRICAS) ---
+# --- INICIALIZACIÓN DE VARIABLES DE ESTADO ---
 if "api_calls" not in st.session_state:
     st.session_state.api_calls = 0
 if "total_tokens" not in st.session_state:
@@ -98,8 +161,9 @@ if "total_tokens" not in st.session_state:
 if "last_latency" not in st.session_state:
     st.session_state.last_latency = 0.0
 
+# --- TÍTULO PRINCIPAL ---
 st.title("⚡ Asistente IA de Christian Silva")
-st.write("Potenciado por **Groq (Llama 3.3)** + **Embeddings Locales**.")
+st.markdown("Potenciado por **Groq (Llama 3.3)** + **Embeddings Locales**.")
 
 # --- GESTIÓN DE LA API KEY ---
 try:
@@ -110,27 +174,25 @@ except FileNotFoundError:
 
 # --- SIDEBAR: DASHBOARD DE INGENIERÍA ---
 with st.sidebar:
-    st.header("📊 Métricas de Ingeniería")
+    st.image("https://cdn-icons-png.flaticon.com/512/10308/10308068.png", width=60) # Icono de Dashboard
+    st.header("Dashboard de Métricas")
     st.markdown("---")
     
-    # Métricas en tiempo real
     col1, col2 = st.columns(2)
     col1.metric("Llamadas API", st.session_state.api_calls)
-    col2.metric("Latencia (s)", f"{st.session_state.last_latency:.2f}s")
+    col2.metric("Latencia", f"{st.session_state.last_latency:.2f}s", delta_color="inverse")
     
-    st.metric("Tokens Procesados (Est.)", st.session_state.total_tokens)
+    st.metric("Tokens Est.", f"{st.session_state.total_tokens:,}")
     
-    # Cálculo ficticio de ahorro vs GPT-4 ($30/millón tokens vs casi gratis)
     savings = (st.session_state.total_tokens / 1000) * 0.03 
-    st.metric("Ahorro de Costos vs GPT-4", f"${savings:.4f}")
+    st.metric("Ahorro vs GPT-4", f"${savings:.4f}", delta=f"+${savings:.4f}")
     
     st.markdown("---")
     st.markdown("**Stack Tecnológico:**")
-    st.code("Python 3.11\nLangChain\nGroq LPU\nFAISS (Vector DB)\nStreamlit", language="text")
-    st.caption("Este dashboard demuestra observabilidad en tiempo real.")
+    st.code("Python 3.11\nLangChain v0.2\nGroq LPU Inference\nFAISS (Vector DB)\nStreamlit Cloud", language="text")
+    st.caption("Monitorización en tiempo real.")
 
 # --- FUNCIONES ---
-
 @st.cache_resource
 def load_and_process_pdf(pdf_path):
     text = ""
@@ -141,7 +203,7 @@ def load_and_process_pdf(pdf_path):
             if content:
                 text += content
     except FileNotFoundError:
-        st.error("❌ No se encontró el archivo PDF. Asegúrate de que 'cv_csilva.pdf' está en la carpeta raíz.")
+        st.error("❌ No se encontró el archivo PDF.")
         return None
     
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
@@ -180,33 +242,29 @@ def get_conversation_chain(vectorstore):
     )
     return chain
 
-# Función auxiliar para actualizar métricas
 def update_metrics(start_time, prompt_len, response_len):
     end_time = time.time()
     st.session_state.last_latency = end_time - start_time
     st.session_state.api_calls += 1
-    # Estimación simple: 1 token ~= 4 caracteres
     estimated_tokens = (prompt_len + response_len) // 4
     st.session_state.total_tokens += estimated_tokens
 
 # --- INICIALIZACIÓN ---
-
 if "conversation" not in st.session_state:
-    with st.spinner("Cargando cerebro digital..."):
+    with st.spinner("Iniciando motor de IA de alto rendimiento..."):
         try:
             vectorstore = load_and_process_pdf("cv_csilva.pdf")
             if vectorstore:
                 st.session_state.conversation = get_conversation_chain(vectorstore)
                 st.session_state.process_complete = True
-                st.toast("¡Sistema listo!", icon="🚀")
+                st.toast("¡Sistema Online! Listo para consultas.", icon="🚀")
         except Exception as e:
-            st.error(f"Ocurrió un error al iniciar: {e}")
+            st.error(f"Error crítico de inicialización: {e}")
 
 # --- INTERFAZ PRINCIPAL CON PESTAÑAS ---
-
 if "process_complete" in st.session_state:
     
-    tab1, tab2, tab3 = st.tabs(["💬 Chat Asistente", "📝 Generador de Cartas", "🕸️ Mapa de Habilidades"])
+    tab1, tab2, tab3 = st.tabs(["💬 Chat Asistente", "🎯 Generador de Cartas", "🕸️ Mapa de Habilidades"])
 
     # --- PESTAÑA 1: CHAT ---
     with tab1:
@@ -217,107 +275,96 @@ if "process_complete" in st.session_state:
             with st.chat_message(message["role"]):
                 st.write(message["content"])
 
-        if prompt := st.chat_input("Pregúntame sobre mis proyectos o experiencia...", max_chars=1000):
+        if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian en Data Engineering?", max_chars=1000):
             st.session_state.messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"):
                 st.write(prompt)
 
             with st.chat_message("assistant"):
-                with st.spinner("Procesando..."):
+                with st.spinner("Analizando y generando respuesta..."):
                     try:
-                        start_time = time.time() # Inicia cronómetro
-                        
+                        start_time = time.time()
                         response = st.session_state.conversation({'question': prompt})
                         ai_response = response['answer']
-                        
-                        # Actualizar métricas
                         update_metrics(start_time, len(prompt), len(ai_response))
-                        
                         st.write(ai_response)
                         st.session_state.messages.append({"role": "assistant", "content": ai_response})
-                        
-                        # Forzar actualización de la sidebar
-                        st.rerun() 
-                        
+                        st.rerun()
                     except Exception as e:
                         st.error(f"Error: {e}")
 
     # --- PESTAÑA 2: GENERADOR DE CANDIDATURAS ---
     with tab2:
-        st.header("🎯 Generador de Cartas de Presentación")
-        st.markdown("Pega aquí la descripción de la oferta y generaré una carta personalizada basada en mi CV.")
+        st.header("Generador de Cartas de Presentación")
+        st.markdown("Pega la descripción de una oferta de trabajo y la IA redactará una carta personalizada destacando por qué mi perfil es el ideal, basándose en mi CV.")
         
-        job_description = st.text_area("Descripción de la Oferta:", height=200, placeholder="Pega aquí los requisitos del puesto...", max_chars=3000)
+        job_description = st.text_area("Descripción del Puesto (Job Description):", height=250, placeholder="Pega aquí los requisitos y responsabilidades de la oferta...", max_chars=4000)
         
         if st.button("🚀 Generar Carta Personalizada"):
             if job_description:
-                with st.spinner("Redactando..."):
+                with st.spinner("Cruzando datos del CV con la oferta y redactando..."):
                     try:
-                        start_time = time.time() # Inicia cronómetro
-                        
-                        prompt_carta = f"Actúa como el candidato. Analiza esta oferta: {job_description}. Basado en mi CV (contexto), escribe una carta de presentación persuasiva."
+                        start_time = time.time()
+                        prompt_carta = f"Actúa como el candidato Christian Silva. Analiza esta oferta de trabajo: --- {job_description} ---. Basándote EXCLUSIVAMENTE en la información de mi CV (contexto), redacta una carta de presentación profesional, persuasiva y bien estructurada que destaque mis habilidades y experiencia más relevantes para este puesto específico. Mantén un tono entusiasta pero formal."
                         response = st.session_state.conversation({'question': prompt_carta})
                         ai_response = response['answer']
-                        
-                        # Actualizar métricas
                         update_metrics(start_time, len(prompt_carta), len(ai_response))
                         
-                        st.subheader("Tu Carta Generada:")
+                        st.subheader("Propuesta de Carta:")
                         st.markdown(ai_response)
                         st.balloons()
-                        
-                        # Nota: Aquí no hacemos st.rerun() completo para no borrar la carta generada, 
-                        # pero las métricas se actualizarán en la siguiente interacción.
-                        
                     except Exception as e:
                         st.error(f"Error: {e}")
             else:
-                st.warning("⚠️ Pega la descripción de la oferta primero.")
+                st.warning("⚠️ Por favor, pega la descripción de la oferta primero.")
 
     # --- PESTAÑA 3: GRAFO DE CONOCIMIENTO ---
     with tab3:
-        st.header("🕸️ Mapa de Habilidades Interactivo")
-        st.markdown("Explora mis conexiones técnicas. ¡Puedes arrastrar los nodos!")
+        st.header("Mapa de Habilidades Interactivo")
+        st.markdown("Visualiza cómo se conectan mis áreas de experiencia. ¡Arrastra los nodos para explorar!")
         
         nodes = []
         edges = []
         
-        # Nodos
-        nodes.append(Node(id="Yo", label="Christian Silva", size=40, color="#f97316"))
-        nodes.append(Node(id="AI", label="Artificial Intelligence", color="#3b82f6"))
+        # Nodos (Colores actualizados)
+        nodes.append(Node(id="Yo", label="Christian Silva", size=45, color="#f97316", shape="circularImage", image="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"))
+        nodes.append(Node(id="AI", label="Artificial Intelligence", color="#3b82f6", size=30))
         nodes.append(Node(id="ML", label="Machine Learning", color="#3b82f6"))
         nodes.append(Node(id="RAG", label="RAG Systems", color="#3b82f6"))
-        nodes.append(Node(id="NLP", label="NLP", color="#3b82f6"))
-        nodes.append(Node(id="Py", label="Python", color="#10b981"))
-        nodes.append(Node(id="SQL", label="SQL", color="#10b981"))
-        nodes.append(Node(id="St", label="Streamlit", color="#10b981"))
-        nodes.append(Node(id="Git", label="Git/GitHub", color="#10b981"))
-        nodes.append(Node(id="Com", label="Comunicación", color="#8b5cf6"))
-        nodes.append(Node(id="Led", label="Liderazgo", color="#8b5cf6"))
-        nodes.append(Node(id="Prob", label="Resolución Problemas", color="#8b5cf6"))
-        
+        nodes.append(Node(id="NLP", label="NLP & LLMs", color="#3b82f6"))
+        nodes.append(Node(id="Py", label="Python Ecosystem", color="#10b981", size=30))
+        nodes.append(Node(id="Data", label="Data Engineering", color="#10b981"))
+        nodes.append(Node(id="SQL", label="SQL & Databases", color="#10b981"))
+        nodes.append(Node(id="St", label="Streamlit / Web", color="#10b981"))
+        nodes.append(Node(id="Cloud", label="Cloud Services", color="#8b5cf6", size=25))
+        nodes.append(Node(id="Soft", label="Soft Skills", color="#f59e0b", size=25))
+        nodes.append(Node(id="Com", label="Comunicación", color="#f59e0b"))
+        nodes.append(Node(id="Prob", label="Resolución de Problemas", color="#f59e0b"))
+
         # Aristas
-        edges.append(Edge(source="Yo", target="AI", label="Especialidad"))
-        edges.append(Edge(source="AI", target="ML", label="Core"))
-        edges.append(Edge(source="AI", target="RAG", label="Implementación"))
-        edges.append(Edge(source="AI", target="NLP", label="Uso"))
-        edges.append(Edge(source="Yo", target="Py", label="Experto"))
-        edges.append(Edge(source="Yo", target="SQL", label="Avanzado"))
+        edges.append(Edge(source="Yo", target="AI", label="Especialidad Principal"))
+        edges.append(Edge(source="Yo", target="Py", label="Lenguaje Core"))
+        edges.append(Edge(source="AI", target="ML", label="Fundamento"))
+        edges.append(Edge(source="AI", target="RAG", label="Implementación Avanzada"))
+        edges.append(Edge(source="AI", target="NLP", label="Aplicación"))
+        edges.append(Edge(source="Py", target="Data", label="Uso"))
         edges.append(Edge(source="Py", target="St", label="Framework"))
-        edges.append(Edge(source="Py", target="AI", label="Base"))
-        edges.append(Edge(source="Yo", target="Com", label="Soft Skill"))
-        edges.append(Edge(source="Yo", target="Led", label="Soft Skill"))
-        edges.append(Edge(source="Yo", target="Prob", label="Enfoque"))
+        edges.append(Edge(source="Data", target="SQL", label="Herramienta"))
+        edges.append(Edge(source="Yo", target="Cloud", label="Entorno"))
+        edges.append(Edge(source="Yo", target="Soft", label="Competencias"))
+        edges.append(Edge(source="Soft", target="Com", label="Clave"))
+        edges.append(Edge(source="Soft", target="Prob", label="Enfoque"))
 
         config = Config(
-            width=800,
-            height=500,
+            width=900,
+            height=600,
             directed=True, 
             physics=True, 
             hierarchical=False,
             nodeHighlightBehavior=True,
-            highlightColor="#F7A7A6",
-            collapsible=False
+            highlightColor="#f97316",
+            collapsible=False,
+            node={'labelProperty': 'label', 'renderLabel': True}
         )
         
-        return_value = agraph(nodes=nodes, edges=edges, config=config)
+        agraph(nodes=nodes, edges=edges, config=config)
