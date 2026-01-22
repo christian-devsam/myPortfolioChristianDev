@@ -50,7 +50,7 @@ st.markdown("""
     
     /* CAJA DE TEXTO (INPUT) */
     .stTextInput input, .stChatInput textarea { 
-        color: #ffffff !important; /* Texto que escribes en blanco */
+        color: #000000 !important; /* Texto que escribes en blanco */
         caret-color: #f97316; /* El cursor parpadeante en naranja */
     }
     
@@ -149,7 +149,7 @@ if "process_complete" in st.session_state:
 
     # --- INPUT CON RESTRICCIÓN DE CARACTERES ---
     # max_chars=1000 evita enviar textos gigantes
-    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?", max_chars=1000):
+    if prompt := st.chat_input("Ej: ¿Qué experiencia tiene Christian?", max_chars=30):
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
@@ -163,3 +163,4 @@ if "process_complete" in st.session_state:
                     st.session_state.messages.append({"role": "assistant", "content": ai_response})
                 except Exception as e:
                     st.error(f"Error generando respuesta: {e}")
+
