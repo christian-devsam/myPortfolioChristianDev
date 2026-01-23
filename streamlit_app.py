@@ -117,7 +117,7 @@ if "total_tokens" not in st.session_state: st.session_state.total_tokens = 0
 if "last_latency" not in st.session_state: st.session_state.last_latency = 0.0
 if "last_audio_hash" not in st.session_state: st.session_state.last_audio_hash = None
 
-st.title("⚡ IA de ChristianS")
+#st.title("⚡ IA de ChristianS")
 st.markdown("Potenciado por **Groq (Llama 3.3 + Whisper)** + **Embeddings Locales** para leer CV de Christian.")
 
 # --- API KEY & CLIENTE GROQ ---
@@ -326,6 +326,7 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
 
 
 
