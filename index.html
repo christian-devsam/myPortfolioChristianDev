@@ -135,52 +135,66 @@
     </div>
 </section>
 
-    <section id="portfolio" class="portfolio">
-        <div class="contenido-seccion">
-            <h2 class="titulo-seccion">Proyectos Destacados</h2>
-            <div class="galeria">
-                <div class="proyecto">
-                    <img src="img/datastage-airflow.png" alt="Arquitectura ETL">
-                    <div class="overlay">
-                        <h3>Migración DataStage - Airflow</h3>
-                        <p>Migración de flujos en datastage a python en airflow.</p>
-                        <p class="tech-tags">Datastage | Python | Airflow</p>
+    <section id="proyectos" class="projects-section">
+        <div class="container">
+            <h2 class="section-title">Ingeniería & Proyectos <span class="accent-dot">.</span></h2>
+            <p class="section-subtitle">Soluciones desplegadas desde el concepto hasta producción.</p>
+    
+            <div class="project-card">
+                
+                <div class="project-visual">
+                    <div class="visual-overlay"></div>
+                    <img src="https://via.placeholder.com/600x400/0f172a/f97316?text=Demo+Chatbot+RAG" alt="Chatbot RAG Interface">
+                    <div class="tech-overlay">
+                        <span><i class="fa-solid fa-bolt"></i> Latencia: < 1.2s</span>
+                        <span><i class="fa-solid fa-layer-group"></i> Llama 3.3 70B</span>
                     </div>
                 </div>
-                <div class="proyecto">
-                    <img src="img/airflow_dag_demo.jpg" alt="Arquitectura ETL">
-                    <div class="overlay">
-                        <h3>Pipeline Financiero GCP</h3>
-                        <p>Migración On-Premise a BigQuery con Airflow y Data Fusion.</p>
-                        <p class="tech-tags">Python | Airflow | BigQuery</p>
+    
+                <div class="project-details">
+                    <h3 class="project-title">RAG AI Assistant & Voice Analysis</h3>
+                    <p class="project-desc">
+                        Sistema conversacional multimodal capaz de "hablar" con documentos PDF y transcribir audio en tiempo real. 
+                        Implementa un pipeline RAG (Retrieval-Augmented Generation) optimizado para baja latencia usando Groq LPUs.
+                    </p>
+    
+                    <div class="architecture-pipeline">
+                        <div class="pipeline-step">
+                            <span class="step-icon"><i class="fa-solid fa-file-pdf"></i></span>
+                            <span class="step-label">Ingesta</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-icon"><i class="fa-solid fa-scissors"></i></span>
+                            <span class="step-label">Chunking</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-icon"><i class="fa-solid fa-vector-square"></i></span>
+                            <span class="step-label">FAISS (Vector DB)</span>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step active-step">
+                            <span class="step-icon"><i class="fa-solid fa-robot"></i></span>
+                            <span class="step-label">Llama 3.3</span>
+                        </div>
                     </div>
-                </div>
-                <div class="proyecto">
-                    <img src="img/bot_architecture.png" alt="Chatbot IA">
-                    <div class="overlay">
-                        <h3>Asistente Virtual IA</h3>
-                        <p>Integración Azure Bot Service con NLP Corporativo.</p>
-                        <p class="tech-tags">Nodejs | Azure | NLP</p>
+    
+                    <div class="project-stack">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">LangChain</span>
+                        <span class="tech-badge">Streamlit</span>
+                        <span class="tech-badge">Whisper v3</span>
                     </div>
-                </div>
-                <div class="proyecto">
-                    <img src="img/dashboard_demo.png" alt="Dashboard Automatizado">
-                    <div class="overlay">
-                        <h3>Automatización de Reportes</h3>
-                        <p>Extracción de datos y visualización automática.</p>
-                        <p class="tech-tags">Python | Sql Server | Power BI</p>
-                    </div>
-                </div>
-                <div class="proyecto">
-                    <img src="img/mailbot_arq.png" alt="Dashboard Automatizado">
-                    <div class="overlay">
-                        <h3>Automatización de procesos</h3>
-                        <p>Flujos de automatizacion para procesos de gestión</p>
-                        <p class="tech-tags">App Logic | Azure | JavaScript</p>
+    
+                    <div class="project-links">
+                        <a href="#" class="btn btn-primary"><i class="fa-solid fa-play"></i> Live Demo</a>
+                        <a href="#" class="btn btn-outline"><i class="fa-brands fa-github"></i> Ver Código</a>
                     </div>
                 </div>
             </div>
-        </div>
+    
+            </div>
     </section>
 
     <section class="contacto" id="contacto">
