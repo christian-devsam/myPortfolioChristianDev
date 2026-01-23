@@ -926,159 +926,153 @@ h1, h2, h3, h4, p, span, i {
         grid-template-columns: 1fr; /* Una columna en celular */
     }
 }
-/* --- SECCIÓN PROYECTOS (ESTILO INGENIERÍA) --- */
+/* --- PROYECTOS GRID (FUTURISTA & COMPACTO) --- */
+
 .projects-section {
-    padding: 80px 0;
+    padding: 60px 0;
 }
 
-.project-card {
-    display: flex;
-    background: rgba(30, 41, 59, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    overflow: hidden;
-    margin-bottom: 60px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* El Grid Mágico: Se adapta automáticamente */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Columnas automáticas */
+    gap: 25px;
+    margin-top: 40px;
 }
 
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    border-color: rgba(249, 115, 22, 0.3);
-}
-
-/* --- LADO IZQUIERDO: VISUAL --- */
-.project-visual {
-    flex: 1.2;
+/* La Tarjeta Base */
+.cyber-card {
     position: relative;
-    min-height: 300px;
+    height: 280px; /* Altura fija compacta */
+    border-radius: 20px;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #0f172a;
+    transition: all 0.4s ease;
+    cursor: default;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
-.project-visual img {
+/* Efecto Hover Tarjeta: Borde Neón */
+.cyber-card:hover {
+    border-color: rgba(249, 115, 22, 0.6);
+    box-shadow: 0 10px 30px rgba(249, 115, 22, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Imagen de Fondo (El Diagrama) */
+.card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3; /* Oscuro por defecto para leer el texto */
+    transition: all 0.5s ease;
+    filter: grayscale(80%) blur(1px); /* Efecto inicial "apagado" */
 }
 
-.project-card:hover .project-visual img {
-    transform: scale(1.05);
+/* Al pasar el mouse, el diagrama se ve claro */
+.cyber-card:hover .card-bg {
+    opacity: 0.6;
+    filter: grayscale(0%) blur(0);
+    transform: scale(1.05); /* Zoom sutil */
 }
 
-/* Overlay con datos técnicos sobre la imagen */
-.tech-overlay {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+/* Contenido HUD (Capa superior) */
+.card-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 25px;
+    background: linear-gradient(to bottom, rgba(15,23,42,0.4), rgba(15,23,42,0.95));
 }
 
-.tech-overlay span {
-    background: rgba(0, 0, 0, 0.7);
-    color: #f97316;
-    padding: 5px 12px;
-    border-radius: 8px;
-    font-size: 0.8rem;
+/* Header de la tarjeta */
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    padding: 4px 10px;
+    border-radius: 50px;
+    border: 1px solid rgba(34, 197, 94, 0.3);
     font-weight: 600;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(249, 115, 22, 0.2);
 }
 
-/* --- LADO DERECHO: DETALLES --- */
-.project-details {
-    flex: 1;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.project-title {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #fff;
-}
-
-.project-desc {
-    color: #cbd5e1;
-    margin-bottom: 25px;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-/* --- EL PIPELINE VISUAL (ARQUITECTURA) --- */
-.architecture-pipeline {
-    display: flex;
-    align-items: center;
-    background: rgba(15, 23, 42, 0.6);
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
-    overflow-x: auto; /* Scroll si es muy largo en móvil */
-}
-
-.pipeline-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    min-width: 60px;
-}
-
-.step-icon {
-    font-size: 1.2rem;
+.tech-mono {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
     color: #94a3b8;
+    letter-spacing: 1px;
 }
 
-.active-step .step-icon {
-    color: #f97316; /* Naranja para el paso clave */
-    text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
-}
-
-.step-label {
-    font-size: 0.7rem;
-    color: #64748b;
-    text-transform: uppercase;
+/* Cuerpo principal */
+.card-main h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    color: white;
     font-weight: 700;
 }
 
-.pipeline-arrow {
-    color: #475569;
-    margin: 0 10px;
-    font-weight: bold;
+.card-main p {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin: 0;
 }
 
-/* --- STACK BADGES & LINKS --- */
-.project-stack {
+/* Footer: Pipeline Visual Simple */
+.card-footer {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 30px;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 15px;
 }
 
-.tech-badge {
-    background: transparent;
-    border: 1px solid #334155;
-    color: #94a3b8;
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-}
-
-.project-links {
+.micro-pipeline {
+    color: #f97316;
+    font-size: 0.9rem;
     display: flex;
-    gap: 15px;
+    gap: 8px;
+    align-items: center;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .project-card {
-        flex-direction: column;
+.icon-link {
+    color: white;
+    background: rgba(255,255,255,0.1);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.icon-link:hover {
+    background: #f97316;
+    transform: rotate(45deg); /* Pequeño efecto al hover */
+}
+
+/* Ajuste móvil */
+@media (max-width: 768px) {
+    .projects-grid {
+        grid-template-columns: 1fr; /* Una columna en móvil */
     }
-    .project-visual {
-        height: 250px;
+    .cyber-card {
+        height: auto;
+        min-height: 280px;
     }
 }
