@@ -241,7 +241,26 @@
         <img class="modal-contenido" id="img-expandida">
         <div id="caption"></div>
     </div>
-
+    <div id="ai-widget-trigger" class="ai-trigger">
+        <div class="pulse-ring"></div>
+        <i class="fa-solid fa-robot"></i>
+        <span class="tooltip">Hablar con Christian AI</span>
+    </div>
+    
+    <div id="ai-chat-window" class="chat-window">
+        <div class="chat-header">
+            <div class="header-info">
+                <span class="status-dot"></span>
+                <h3>Christian AI Assistant</h3>
+            </div>
+            <button id="close-chat-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <iframe 
+            src="https://myportfolio-christian-app.streamlit.app?embed=true" 
+            frameborder="0" 
+            allow="microphone; camera">
+        </iframe>
+    </div>
     <script src="js/particles.min.js"></script>
     <script src="js/fondo.js"></script>
     <script src="app.js"></script> 
