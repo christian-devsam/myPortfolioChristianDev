@@ -289,47 +289,35 @@
         </div>
     </section>
 
-    <section class="contacto" id="contacto">
-        <div class="contenido-seccion">
-            <h2 class="titulo-seccion">Contacto</h2>
-            <div class="fila-contacto">
-                <div class="col-info">
-                    <p><i class="fa-solid fa-envelope"></i> silvanegrete.ch@gmail.com</p>
-                    <p><i class="fa-solid fa-location-dot"></i> Santiago, Chile</p>
-                    <div class="redes-contacto">
-                        <a href="https://linkedin.com/in/christian-silva-negrete-26913a22b/" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://github.com/christian-devsam" target="_blank"><i class="fa-brands fa-github"></i></a>
-                    </div>
-                </div>
-                <div class="col-form">
-                    <form action="https://formsubmit.co/silvanegrete.ch@gmail.com" method="POST">
-    
-                        <input type="hidden" name="_next" value="https://christian-devsam.github.io/myPortfolioChristianDev/">
-                        
-                        <input type="hidden" name="_subject" value="¡Nuevo contacto desde tu Portafolio de Datos!">
-                        
-                        <input type="hidden" name="_captcha" value="false">
-
-                        <input type="hidden" name="_template" value="table">
-
-                        <input type="text" name="name" placeholder="Nombre / Empresa" required>
-                        <input type="email" name="email" placeholder="Correo Electrónico" required>
-                        <textarea name="message" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
-                        
-                        <button type="submit" class="btn-enviar">
-                            Enviar Mensaje <i class="fa-solid fa-paper-plane"></i>
-                        </button>
-
-                    </form>
-                </div>
+    <section id="contacto" class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">¿Listo para escalar tu arquitectura de datos?</h2>
+            <p class="cta-text">
+                No solo escribo código; diseño soluciones. Si buscas optimizar pipelines, 
+                integrar IA en producción o modernizar tu stack, hablemos.
+            </p>
+            
+            <div class="cta-buttons">
+                <a href="mailto:silvanegrete.ch@gmail.com" class="btn-neon">
+                    <i class="fa-solid fa-envelope"></i> Iniciar Conversación
+                </a>
+                
+                <a href="https://linkedin.com/in/christian-silva-negrete-26913a22b/" target="_blank" class="btn-ghost">
+                    <i class="fa-brands fa-linkedin"></i> Conectar
+                </a>
             </div>
+    
+            <p class="cta-note">
+                <i class="fa-solid fa-robot"></i> ¿Dudas rápidas? Pregúntale a mi Asistente IA en la esquina.
+            </p>
         </div>
+    
+        <div class="cta-glow"></div>
     </section>
-
-    <footer>
-        <p>&copy; 2025 Christian Silva | Data Engineer</p>
+    
+    <footer class="footer">
+        <p>&copy; 2025 Christian Silva | Data & AI Engineer. Construido con <i class="fa-solid fa-heart" style="color: #f97316;"></i> & Streamlit.</p>
     </footer>
-
     <div id="modal-imagen" class="modal">
         <span class="cerrar">&times;</span>
         <img class="modal-contenido" id="img-expandida">
