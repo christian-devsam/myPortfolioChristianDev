@@ -117,7 +117,7 @@ if "total_tokens" not in st.session_state: st.session_state.total_tokens = 0
 if "last_latency" not in st.session_state: st.session_state.last_latency = 0.0
 if "last_audio_hash" not in st.session_state: st.session_state.last_audio_hash = None
 
-#st.title("⚡ IA de ChristianS")
+#st.title("⚡ IA de Christian Silva")
 st.markdown("Potenciado por **Groq (Llama 3.3 + Whisper)** + **Embeddings Locales** para leer CV de Christian.")
 
 # --- API KEY & CLIENTE GROQ ---
@@ -222,7 +222,7 @@ if "process_complete" in st.session_state:
         for message in st.session_state.messages:
             with st.chat_message(message["role"]): st.write(message["content"])
 
-        text_input = st.chat_input("Ej: ¿Christian sabe SQL?...", max_chars=1000)
+        text_input = st.chat_input("Ej: ¿Christian sabe SQL?...", max_chars=50)
 
         
         final_prompt = None
@@ -326,6 +326,7 @@ if "process_complete" in st.session_state:
         )
         
         agraph(nodes=nodes, edges=edges, config=config)
+
 
 
 
