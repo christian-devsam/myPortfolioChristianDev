@@ -366,6 +366,37 @@
             setTimeout(type, 100); // Velocidad de escritura
         }
     })();
+        // --- LÓGICA DEL WIDGET DE CHAT ---
+
+const triggerBtn = document.getElementById('ai-widget-trigger');
+const chatWindow = document.getElementById('ai-chat-window');
+const closeBtn = document.getElementById('close-chat-btn');
+
+// Abrir Chat
+triggerBtn.addEventListener('click', () => {
+    // Si está oculto, mostrarlo. Si no, ocultarlo.
+    if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+        chatWindow.style.display = 'flex';
+        triggerBtn.style.transform = 'scale(0)'; // Oculta el botón flotante al abrir
+    }
+});
+
+// Cerrar Chat
+closeBtn.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+    triggerBtn.style.transform = 'scale(1)'; // Muestra el botón flotante de nuevo
+});
+
+// Opcional: Cerrar si clickean fuera del modal (solo desktop)
+document.addEventListener('click', (e) => {
+    if (chatWindow.style.display === 'flex' && 
+        !chatWindow.contains(e.target) && 
+        !triggerBtn.contains(e.target)) {
+        // Comentar la siguiente línea si quieres que solo se cierre con la X
+        // chatWindow.style.display = 'none';
+        // triggerBtn.style.transform = 'scale(1)';
+    }
+});
 </script>
 </body>
 </html>
