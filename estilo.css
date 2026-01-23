@@ -816,3 +816,113 @@ h1, h2, h3, h4, p, span, i {
         right: 20px;
     }
 }
+/* --- ECOSISTEMA TECNOLÓGICO (STACK) --- */
+
+.stack-section {
+    padding: 80px 0;
+    position: relative;
+    /* Fondo sutilmente diferente si quieres, o transparente */
+}
+
+.ecosystem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+/* LA TARJETA HOLOGRÁFICA */
+.tech-card {
+    background: rgba(30, 41, 59, 0.4); /* Fondo semitransparente */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(10px);
+}
+
+/* Efecto Hover: Levantar y brillar */
+.tech-card:hover {
+    transform: translateY(-10px);
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(249, 115, 22, 0.5); /* Naranja al hover */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 
+                0 0 20px rgba(249, 115, 22, 0.2); /* Resplandor naranja */
+}
+
+/* Cabecera de la tarjeta */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+}
+
+.card-header i {
+    font-size: 2rem;
+    color: #f97316; /* Tu color naranja */
+    background: rgba(249, 115, 22, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.card-header span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+/* Lista de Tags (Las tecnologías) */
+.tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 50px; /* Píldoras */
+    font-size: 0.9rem;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+/* Hover en cada tag individual */
+.tag:hover {
+    background: #f97316;
+    color: white;
+    border-color: #f97316;
+    box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+}
+
+/* Decoración "Glow" interna */
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(249,115,22,0.1) 0%, rgba(0,0,0,0) 70%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+.tech-card:hover .card-glow {
+    opacity: 1;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .ecosystem-grid {
+        grid-template-columns: 1fr; /* Una columna en celular */
+    }
+}
