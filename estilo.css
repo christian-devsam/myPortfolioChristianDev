@@ -708,18 +708,23 @@ h1, h2, h3, h4, p, span, i {
 
 /* 2. Ventana de Chat (Glassmorphism) */
 .chat-window {
-    display: none; /* Oculto al inicio */
+    display: none;
     position: fixed;
-    bottom: 110px; /* Arriba del botón */
+    bottom: 100px; 
     right: 30px;
-    width: 400px; /* Ancho escritorio */
-    height: 600px; /* Alto escritorio */
-    background: rgba(15, 23, 42, 0.95); /* Muy oscuro */
+    
+    /* CAMBIOS CLAVE AQUÍ: */
+    width: 380px;         
+    height: 70vh;         
+    max-height: 600px;   
+    min-height: 400px;    
+    
+    background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(249, 115, 22, 0.3); /* Borde naranja sutil */
+    border: 1px solid rgba(249, 115, 22, 0.3);
     border-radius: 20px;
-    overflow: hidden;
-    z-index: 9999;
+    overflow: hidden; 
+    z-index: 2147483647 !important;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     flex-direction: column;
     animation: slideUp 0.4s ease forwards;
@@ -762,8 +767,8 @@ h1, h2, h3, h4, p, span, i {
 
 #close-chat-btn {
     position: absolute !important; /* Flotar sobre todo */
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: 10px;
     z-index: 2147483650 !important; /* Capa superior máxima */
     
     /* Estilo botón rojo elegante */
