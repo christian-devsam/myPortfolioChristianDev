@@ -761,15 +761,32 @@ h1, h2, h3, h4, p, span, i {
 }
 
 #close-chat-btn {
-    background: none;
-    border: none;
-    color: rgba(255,255,255,0.6);
+    position: absolute !important; /* Flotar sobre todo */
+    top: 15px;
+    right: 15px;
+    z-index: 2147483650 !important; /* Capa superior máxima */
+    
+    /* Estilo botón rojo elegante */
+    background-color: #ef4444; 
+    color: white;
+    border: 2px solid rgba(255,255,255,0.2);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    
+    /* Centrar la X */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    font-size: 1.2rem;
-    transition: color 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
 }
 
-#close-chat-btn:hover { color: #f97316; }
+#close-chat-btn:hover {
+    background-color: #dc2626;
+    transform: scale(1.1);
+}
 
 /* El Iframe */
 .chat-window iframe {
