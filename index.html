@@ -137,201 +137,100 @@
 
     <section id="proyectos" class="projects-section">
         <div class="container">
-            <h2 class="section-title">Ingeniería & Proyectos <span class="accent-dot">.</span></h2>
-            <p class="section-subtitle">Soluciones desplegadas desde el concepto hasta producción.</p>
+            <h2 class="section-title">Arquitectura de Soluciones <span class="accent-dot">.</span></h2>
+            
+            <div class="projects-grid">
     
-            <div class="project-card">
-                
-                <div class="project-visual">
-                    <div class="visual-overlay"></div>
-                    <img src="https://placehold.co/600x400/1e293b/f97316?text=Demo+Chatbot+RAG" alt="Chatbot RAG Interface">
-                    <div class="tech-overlay">
-                        <span><i class="fa-solid fa-bolt"></i> Latencia: < 1.2s</span>
-                        <span><i class="fa-solid fa-layer-group"></i> Llama 3.3 70B</span>
+                <article class="cyber-card">
+                    <div class="card-bg" style="background-image: url('https://placehold.co/600x400/1e293b/f97316?text=Chatbot+RAG');"></div>
+                    <div class="card-content">
+                        <div class="card-top">
+                            <span class="status-badge"><i class="fa-solid fa-circle-dot"></i> Live</span>
+                            <span class="tech-mono">Llama 3.3 // Groq</span>
+                        </div>
+                        <div class="card-main">
+                            <h3>RAG AI Assistant</h3>
+                            <p>Asistente conversacional con memoria vectorial y baja latencia.</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="micro-pipeline">
+                                <i class="fa-solid fa-file-pdf"></i> &rarr; 
+                                <i class="fa-solid fa-vector-square"></i> &rarr; 
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <a href="#" class="icon-link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        </div>
                     </div>
-                </div>
+                </article>
     
-                <div class="project-details">
-                    <h3 class="project-title">RAG AI Assistant & Voice Analysis</h3>
-                    <p class="project-desc">
-                        Sistema conversacional multimodal capaz de "hablar" con documentos PDF y transcribir audio en tiempo real. 
-                        Implementa un pipeline RAG (Retrieval-Augmented Generation) optimizado para baja latencia usando Groq LPUs.
-                    </p>
+                <article class="cyber-card">
+                    <div class="card-bg" style="background-image: url('airflow_dag_demo.jpg');"></div>
+                    <div class="card-content">
+                        <div class="card-top">
+                            <span class="status-badge warning"><i class="fa-solid fa-bolt"></i> Batch</span>
+                            <span class="tech-mono">GCP // Airflow</span>
+                        </div>
+                        <div class="card-main">
+                            <h3>Enterprise Data Lake</h3>
+                            <p>Orquestación ETL híbrida (On-Prem a Cloud) hacia BigQuery.</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="micro-pipeline">
+                                <i class="fa-solid fa-database"></i> &rarr; 
+                                <i class="fa-solid fa-wind"></i> &rarr; 
+                                <i class="fa-brands fa-google"></i>
+                            </div>
+                            <a href="#" class="icon-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        </div>
+                    </div>
+                </article>
     
-                    <div class="architecture-pipeline">
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-file-pdf"></i></span>
-                            <span class="step-label">Ingesta</span>
+                <article class="cyber-card">
+                    <div class="card-bg" style="background-image: url('bot_architecture.png');"></div>
+                    <div class="card-content">
+                        <div class="card-top">
+                            <span class="status-badge"><i class="fa-solid fa-robot"></i> NLP</span>
+                            <span class="tech-mono">Azure // OpenAI</span>
                         </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-scissors"></i></span>
-                            <span class="step-label">Chunking</span>
+                        <div class="card-main">
+                            <h3>ServiceNow AI Desk</h3>
+                            <p>Resolución automática de incidentes TI corporativos.</p>
                         </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-vector-square"></i></span>
-                            <span class="step-label">FAISS (Vector DB)</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step active-step">
-                            <span class="step-icon"><i class="fa-solid fa-robot"></i></span>
-                            <span class="step-label">Llama 3.3</span>
+                        <div class="card-footer">
+                            <div class="micro-pipeline">
+                                <i class="fa-brands fa-servicenow"></i> &rarr; 
+                                <i class="fa-solid fa-brain"></i> &rarr; 
+                                <i class="fa-solid fa-ticket"></i>
+                            </div>
+                            <a href="#" class="icon-link"><i class="fa-solid fa-magnifying-glass"></i></a>
                         </div>
                     </div>
+                </article>
     
-                    <div class="project-stack">
-                        <span class="tech-badge">Python</span>
-                        <span class="tech-badge">LangChain</span>
-                        <span class="tech-badge">Streamlit</span>
-                        <span class="tech-badge">Whisper v3</span>
+                <article class="cyber-card">
+                    <div class="card-bg" style="background-image: url('mailbot_arq.png');"></div>
+                    <div class="card-content">
+                        <div class="card-top">
+                            <span class="status-badge success"><i class="fa-solid fa-check"></i> Auto</span>
+                            <span class="tech-mono">Logic Apps // API</span>
+                        </div>
+                        <div class="card-main">
+                            <h3>MailBot Automation</h3>
+                            <p>Clasificación de correos y creación de tickets vía API.</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="micro-pipeline">
+                                <i class="fa-solid fa-envelope"></i> &rarr; 
+                                <i class="fa-solid fa-gears"></i> &rarr; 
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                            <a href="#" class="icon-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        </div>
                     </div>
+                </article>
     
-                    <div class="project-links">
-                        <a href="#" class="btn btn-primary"><i class="fa-solid fa-play"></i> Live Demo</a>
-                        <a href="#" class="btn btn-outline"><i class="fa-brands fa-github"></i> Ver Código</a>
-                    </div>
-                </div>
             </div>
-            <div class="project-card">
-                <div class="project-visual">
-                    <img src="airflow_dag_demo.jpg" alt="Arquitectura GCP Airflow">
-                    <div class="tech-overlay">
-                        <span><i class="fa-brands fa-google"></i> Google Cloud</span>
-                        <span><i class="fa-solid fa-server"></i> Híbrido</span>
-                    </div>
-                </div>
-            
-                <div class="project-details">
-                    <h3 class="project-title">Enterprise Data Lake & ETL Orchestration</h3>
-                    <p class="project-desc">
-                        Migración y modernización de ingesta de datos desde sistemas legacy (Oracle/SQL Server) hacia Google Cloud Platform. 
-                        Orquestación centralizada con Cloud Composer (Airflow) para alimentar BigQuery y Dashboards en Looker.
-                    </p>
-            
-                    <div class="architecture-pipeline">
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-database"></i></span>
-                            <span class="step-label">On-Premise</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step active-step">
-                            <span class="step-icon"><i class="fa-solid fa-wind"></i></span>
-                            <span class="step-label">Airflow (Composer)</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-cloud"></i></span>
-                            <span class="step-label">BigQuery</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-chart-line"></i></span>
-                            <span class="step-label">Looker</span>
-                        </div>
-                    </div>
-            
-                    <div class="project-stack">
-                        <span class="tech-badge">Python</span>
-                        <span class="tech-badge">Apache Airflow</span>
-                        <span class="tech-badge">BigQuery</span>
-                        <span class="tech-badge">GCP</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-visual">
-                    <img src="bot_architecture.png" alt="Arquitectura Azure Bot">
-                    <div class="tech-overlay">
-                        <span><i class="fa-brands fa-microsoft"></i> Azure AI</span>
-                        <span><i class="fa-solid fa-ticket"></i> ServiceNow</span>
-                    </div>
-                </div>
-            
-                <div class="project-details">
-                    <h3 class="project-title">Corporate AI Service Desk</h3>
-                    <p class="project-desc">
-                        Asistente virtual integrado en ServiceNow capaz de resolver incidentes y consultar bases de conocimiento. 
-                        Utiliza Azure Bot Service y Azure OpenAI (GPT-4) para comprensión de lenguaje natural (NLU) y generación de respuestas.
-                    </p>
-            
-                    <div class="architecture-pipeline">
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-user"></i></span>
-                            <span class="step-label">Usuario</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-brands fa-servicenow"></i></span>
-                            <span class="step-label">Portal</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step active-step">
-                            <span class="step-icon"><i class="fa-solid fa-brain"></i></span>
-                            <span class="step-label">Azure OpenAI</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-database"></i></span>
-                            <span class="step-label">Cosmos DB</span>
-                        </div>
-                    </div>
-            
-                    <div class="project-stack">
-                        <span class="tech-badge">Azure Bot Service</span>
-                        <span class="tech-badge">Node.js</span>
-                        <span class="tech-badge">GPT-4</span>
-                        <span class="tech-badge">Cognitive Search</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-visual">
-                    <img src="mailbot_arq.png" alt="Arquitectura Mailbot">
-                    <div class="tech-overlay">
-                        <span><i class="fa-solid fa-robot"></i> Automatización</span>
-                        <span><i class="fa-solid fa-envelope"></i> Outlook API</span>
-                    </div>
-                </div>
-            
-                <div class="project-details">
-                    <h3 class="project-title">MailBot: Automated Incident Dispatcher</h3>
-                    <p class="project-desc">
-                        Sistema de automatización para clasificación y creación de tickets a partir de correos electrónicos no estructurados.
-                        Procesa e-mails entrantes, extrae entidades clave y ejecuta acciones REST contra la API de ServiceNow.
-                    </p>
-            
-                    <div class="architecture-pipeline">
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-envelope"></i></span>
-                            <span class="step-label">Email Ingest</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step active-step">
-                            <span class="step-icon"><i class="fa-solid fa-gears"></i></span>
-                            <span class="step-label">Logic App</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-code"></i></span>
-                            <span class="step-label">REST API</span>
-                        </div>
-                        <div class="pipeline-arrow">→</div>
-                        <div class="pipeline-step">
-                            <span class="step-icon"><i class="fa-solid fa-check-circle"></i></span>
-                            <span class="step-label">Ticket</span>
-                        </div>
-                    </div>
-            
-                    <div class="project-stack">
-                        <span class="tech-badge">Azure Logic Apps</span>
-                        <span class="tech-badge">REST API</span>
-                        <span class="tech-badge">JSON Parsing</span>
-                        <span class="tech-badge">ServiceNow</span>
-                    </div>
-                </div>
-            </div>
-            </div>
+        </div>
     </section>
 
     <section class="contacto" id="contacto">
