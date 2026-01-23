@@ -341,7 +341,7 @@
     });
 
     // 2. EFECTO TYPEWRITER (MÁQUINA DE ESCRIBIR)
-    const texts = ["Data Engineer", "Cloud Specialist", "GenAI Developer", "Automation Specialist"];
+    const texts = ["Data Engineer", "GenAI Developer", "Automation Specialist", "Cloud Specialist"];
     let count = 0;
     let index = 0;
     let currentText = "";
@@ -391,8 +391,8 @@
             !chatWindow.contains(e.target) && 
             !triggerBtn.contains(e.target)) {
             // Comentar la siguiente línea si quieres que solo se cierre con la X
-            // chatWindow.style.display = 'none';
-            // triggerBtn.style.transform = 'scale(1)';
+            chatWindow.style.display = 'none';
+            triggerBtn.style.transform = 'scale(1)';
         }
     });
 </script>
