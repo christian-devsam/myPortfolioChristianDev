@@ -717,7 +717,7 @@ h1, h2, h3, h4, p, span, i {
     width: 380px;         
     height: 70vh;         
     max-height: 600px;   
-    min-height: 400px;    
+    min-height: 520px;    
     
     background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(15px);
