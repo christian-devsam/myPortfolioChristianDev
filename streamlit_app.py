@@ -235,7 +235,7 @@ def transcribe_audio(audio_bytes):
 if "conversation" not in st.session_state:
     with st.spinner("Inicializando sistemas..."):
         try:
-            vectorstore = load_and_process_pdf("cv_csilva.pdf")
+            vectorstore = load_and_process_pdf("CSILVACV.pdf")
             if vectorstore:
                 st.session_state.conversation = get_conversation_chain(vectorstore)
                 st.session_state.process_complete = True
