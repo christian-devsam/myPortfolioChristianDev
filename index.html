@@ -25,6 +25,28 @@
     </script>
 </head>
 <body>
+
+    <!-- BARRA DE PROGRESO DE SCROLL -->
+    <div id="scroll-progress"></div>
+
+    <!-- NAVBAR STICKY -->
+    <nav class="navbar" id="navbar">
+        <a href="#inicio" class="nav-brand">
+            <span class="brand-bracket">&lt;</span>CS<span class="brand-bracket">/&gt;</span>
+        </a>
+        <div class="nav-links" id="nav-links">
+            <a href="#inicio" class="nav-link">Inicio</a>
+            <a href="#sobre-mi" class="nav-link">Sobre Mí</a>
+            <a href="#stack" class="nav-link">Stack</a>
+            <a href="#experiencia" class="nav-link">Experiencia</a>
+            <a href="#proyectos" class="nav-link">Proyectos</a>
+            <a href="#contacto" class="nav-link nav-cta">Contacto</a>
+        </div>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </nav>
+
     <div id="particles-js"></div>
    <section id="inicio" class="inicio">
         
@@ -74,6 +96,42 @@
                             <small>Especialización en LLMs, RAG & Prompt Eng.</small>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN MÉTRICAS DE IMPACTO -->
+    <section id="metricas" class="metricas-section reveal">
+        <div class="container">
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-icon"><i class="fa-solid fa-pipe-section"></i></div>
+                    <div class="metric-value">
+                        <span class="metric-number" data-target="10">0</span><span class="metric-unit">+</span>
+                    </div>
+                    <p class="metric-label">Pipelines en Producción</p>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-icon"><i class="fa-solid fa-hard-drive"></i></div>
+                    <div class="metric-value">
+                        <span class="metric-number" data-target="5">0</span><span class="metric-unit">TB+</span>
+                    </div>
+                    <p class="metric-label">Datos Procesados</p>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-icon"><i class="fa-solid fa-robot"></i></div>
+                    <div class="metric-value">
+                        <span class="metric-number" data-target="4">0</span><span class="metric-unit">+</span>
+                    </div>
+                    <p class="metric-label">Soluciones IA Desplegadas</p>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-icon"><i class="fa-brands fa-google"></i></div>
+                    <div class="metric-value">
+                        <span class="metric-number" data-target="3">0</span><span class="metric-unit">+</span>
+                    </div>
+                    <p class="metric-label">Años en Cloud GCP / Azure</p>
                 </div>
             </div>
         </div>
@@ -146,13 +204,63 @@
     </div>
 </section>
 
+    <!-- SECCIÓN EXPERIENCIA / TIMELINE -->
+    <section id="experiencia" class="experiencia-section reveal">
+        <div class="container">
+            <h2 class="section-title">Trayectoria<span class="accent-dot">.</span></h2>
+            <p class="section-subtitle">Del código al impacto en producción.</p>
+            <div class="timeline">
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2024 — Presente</span>
+                        <h3>Data & AI Engineer</h3>
+                        <p class="timeline-company"><i class="fa-solid fa-building"></i> Empresa de Tecnología Corporativa</p>
+                        <p>Diseño e implementación de pipelines ETL de alto volumen en GCP. Integración de LLMs open-source (Llama 3.3) en flujos de negocio reales usando RAG y LangChain. Automatización inteligente de procesos ITSM con Azure OpenAI.</p>
+                        <div class="timeline-tags">
+                            <span>GCP</span><span>BigQuery</span><span>LangChain</span><span>RAG</span><span>LLMs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2023 — 2024</span>
+                        <h3>Data Engineer</h3>
+                        <p class="timeline-company"><i class="fa-solid fa-building"></i> Empresa Sector Financiero</p>
+                        <p>Migración de pipelines legacy DataStage hacia Apache Airflow en Cloud Composer. Construcción de Data Lake en BigQuery. Automatización de reportería BI con Python + Power BI.</p>
+                        <div class="timeline-tags">
+                            <span>Airflow</span><span>Azure</span><span>Power BI</span><span>Python</span><span>ETL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot dot-edu"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2023</span>
+                        <h3>Diplomado IA Generativa</h3>
+                        <p class="timeline-company"><i class="fa-solid fa-graduation-cap"></i> Pontificia Universidad Católica (PUC)</p>
+                        <p>Especialización en LLMs, Retrieval-Augmented Generation (RAG), Prompt Engineering y Fine-tuning. Proyecto final: sistema RAG multimodal en producción.</p>
+                        <div class="timeline-tags">
+                            <span>LLMs</span><span>RAG</span><span>HuggingFace</span><span>Prompt Eng.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <section id="proyectos" class="projects-section">
         <div class="container">
             <h2 class="section-title">Proyectos<span class="accent-dot">.</span></h2>
             
             <div class="projects-grid">
-    
-                <article class="cyber-card">
+
+                <article class="cyber-card reveal">
                     <div class="card-bg" style="background-image: url('https://christian-devsam.github.io/myPortfolioChristianDev/img/chat-grok.png');"></div>
                     <div class="card-content">
                         <div class="card-top">
@@ -161,20 +269,20 @@
                         </div>
                         <div class="card-main">
                             <h3>RAG AI Assistant</h3>
-                            <p>Asistente conversacional con memoria vectorial y baja latencia.</p>
+                            <p>LLM con memoria vectorial FAISS sobre documentos propios. Respuestas en &lt;2s vía Groq API. El mismo asistente integrado en este portafolio.</p>
                         </div>
                         <div class="card-footer">
                             <div class="micro-pipeline">
-                                <i class="fa-solid fa-file-pdf"></i> &rarr; 
-                                <i class="fa-solid fa-vector-square"></i> &rarr; 
+                                <i class="fa-solid fa-file-pdf"></i> &rarr;
+                                <i class="fa-solid fa-vector-square"></i> &rarr;
                                 <i class="fa-solid fa-robot"></i>
                             </div>
-                            <a href="https://myportfolio-christian-app.streamlit.app/" class="icon-link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <a href="https://myportfolio-christian-app.streamlit.app/" target="_blank" class="icon-link" title="Ver demo en vivo"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
                 </article>
-    
-                <article class="cyber-card">
+
+                <article class="cyber-card reveal">
                     <div class="card-bg" style="background-image: url('https://christian-devsam.github.io/myPortfolioChristianDev/img/airflow_dag_demo.jpg');"></div>
                     <div class="card-content">
                         <div class="card-top">
@@ -183,23 +291,22 @@
                         </div>
                         <div class="card-main">
                             <h3>Enterprise Data Lake</h3>
-                            <p>Orquestación ETL híbrida (On-Prem a Cloud Composer) hacia BigQuery.</p>
+                            <p>Orquestación ETL híbrida On-Prem → Cloud Composer → BigQuery. Procesamiento de TB de datos con DAGs optimizados y alertas automáticas.</p>
                         </div>
                         <div class="card-footer">
                             <div class="micro-pipeline">
-                                <i class="fa-solid fa-database"></i> &rarr; 
-                                <i class="fa-solid fa-wind"></i> &rarr; 
+                                <i class="fa-solid fa-database"></i> &rarr;
+                                <i class="fa-solid fa-wind"></i> &rarr;
                                 <i class="fa-brands fa-google"></i>
                             </div>
-                            <a href="#" class="icon-link" aria-label="Búsqueda privada">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <span class="sr-only">Privado</span>
+                            <a href="#" class="icon-link" title="Proyecto privado — NDA">
+                                <i class="fa-solid fa-lock"></i>
                             </a>
                         </div>
                     </div>
                 </article>
-    
-                <article class="cyber-card">
+
+                <article class="cyber-card reveal">
                     <div class="card-bg" style="background-image: url('https://christian-devsam.github.io/myPortfolioChristianDev/img/bot_architecture.png');"></div>
                     <div class="card-content">
                         <div class="card-top">
@@ -208,20 +315,20 @@
                         </div>
                         <div class="card-main">
                             <h3>Chatbot AI HelpDesk</h3>
-                            <p>Consulta y resolución de tickets ITSM corporativos.</p>
+                            <p>Agente conversacional que resuelve y escala tickets ITSM sin intervención humana. Reduce carga de soporte L1 en un 60% estimado.</p>
                         </div>
                         <div class="card-footer">
                             <div class="micro-pipeline">
-                                <i class="fa-brands fa-user"></i> &rarr; 
-                                <i class="fa-solid fa-brain"></i> &rarr; 
+                                <i class="fa-solid fa-user"></i> &rarr;
+                                <i class="fa-solid fa-brain"></i> &rarr;
                                 <i class="fa-solid fa-ticket"></i>
                             </div>
-                            <a href="#" class="icon-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+                            <a href="#" class="icon-link" title="Proyecto privado — NDA"><i class="fa-solid fa-lock"></i></a>
                         </div>
                     </div>
                 </article>
-    
-                <article class="cyber-card">
+
+                <article class="cyber-card reveal">
                     <div class="card-bg" style="background-image: url('https://christian-devsam.github.io/myPortfolioChristianDev/img/mailbot_arq.png');"></div>
                     <div class="card-content">
                         <div class="card-top">
@@ -230,19 +337,20 @@
                         </div>
                         <div class="card-main">
                             <h3>MailBot Automation</h3>
-                            <p>Clasificación de correos, creación y modificación de tickets vía API.</p>
+                            <p>Pipeline de clasificación NLP sobre correos entrantes. Crea, asigna y actualiza tickets en ITSM vía API REST de forma completamente autónoma.</p>
                         </div>
                         <div class="card-footer">
                             <div class="micro-pipeline">
-                                <i class="fa-solid fa-envelope"></i> &rarr; 
-                                <i class="fa-solid fa-gears"></i> &rarr; 
+                                <i class="fa-solid fa-envelope"></i> &rarr;
+                                <i class="fa-solid fa-gears"></i> &rarr;
                                 <i class="fa-solid fa-code"></i>
                             </div>
-                            <a href="#" class="icon-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+                            <a href="#" class="icon-link" title="Proyecto privado — NDA"><i class="fa-solid fa-lock"></i></a>
                         </div>
                     </div>
                 </article>
-                <article class="cyber-card">
+
+                <article class="cyber-card reveal">
                     <div class="card-bg" style="background-image: url('https://christian-devsam.github.io/myPortfolioChristianDev/img/dashboard_demo.png');"></div>
                     <div class="card-content">
                         <div class="card-top">
@@ -250,21 +358,21 @@
                             <span class="tech-mono">Python // Power BI</span>
                         </div>
                         <div class="card-main">
-                            <h3>Reporting BI</h3>
-                            <p>Pipeline ETL automatizado: Ingesta SQL, transformación en Python y actualización visual en Power BI.</p>
+                            <h3>Reporting BI Automatizado</h3>
+                            <p>ETL Python que ingesta desde SQL Server, transforma y publica directamente en Power BI vía API. Elimina actualización manual diaria.</p>
                         </div>
                         <div class="card-footer">
                             <div class="micro-pipeline">
-                                <i class="fa-solid fa-database"></i> &rarr; 
-                                <i class="fa-brands fa-python"></i> &rarr; 
+                                <i class="fa-solid fa-database"></i> &rarr;
+                                <i class="fa-brands fa-python"></i> &rarr;
                                 <i class="fa-solid fa-chart-simple"></i>
                             </div>
-                            <a href="#" class="icon-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+                            <a href="#" class="icon-link" title="Proyecto privado — NDA"><i class="fa-solid fa-lock"></i></a>
                         </div>
                     </div>
                 </article>
-                
-                <article class="cyber-card">
+
+                <article class="cyber-card reveal">
                     <div class="card-bg" style="background-image: url('https://christian-devsam.github.io/myPortfolioChristianDev/img/datastage-airflow.png');"></div>
                     <div class="card-content">
                         <div class="card-top">
@@ -273,15 +381,15 @@
                         </div>
                         <div class="card-main">
                             <h3>Airflow Migration</h3>
-                            <p>Migración de pipelines DataStage hacia orquestación con Apache Airflow.</p>
+                            <p>Reescritura de +20 jobs DataStage a DAGs en Python. Reducción de costos de licencia y ganancia de visibilidad operacional en tiempo real.</p>
                         </div>
                         <div class="card-footer">
                             <div class="micro-pipeline">
-                                <i class="fa-solid fa-server"></i> &rarr; 
-                                <i class="fa-solid fa-file-code"></i> &rarr; 
+                                <i class="fa-solid fa-server"></i> &rarr;
+                                <i class="fa-solid fa-file-code"></i> &rarr;
                                 <i class="fa-solid fa-wind"></i>
                             </div>
-                            <a href="#" class="icon-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+                            <a href="#" class="icon-link" title="Proyecto privado — NDA"><i class="fa-solid fa-lock"></i></a>
                         </div>
                     </div>
                 </article>
@@ -345,7 +453,72 @@
     </div>
     <script src="js/particles.min.js"></script>
     <script src="js/fondo.js"></script>
-    <script src="app.js"></script> 
+    <script src="app.js"></script>
+
+    <script>
+    // ─── NAVBAR: scroll shrink + active link ───────────────────────────
+    const navbar  = document.getElementById('navbar');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+
+    window.addEventListener('scroll', () => {
+        // Shrink navbar after 80px
+        navbar.classList.toggle('scrolled', window.scrollY > 80);
+
+        // Scroll progress bar
+        const docH  = document.documentElement.scrollHeight - window.innerHeight;
+        const pct   = (window.scrollY / docH) * 100;
+        document.getElementById('scroll-progress').style.width = pct + '%';
+
+        // Active nav link
+        let current = '';
+        sections.forEach(sec => {
+            if (window.scrollY >= sec.offsetTop - 120) current = sec.getAttribute('id');
+        });
+        navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+    });
+
+    // Mobile menu toggle
+    document.getElementById('nav-toggle').addEventListener('click', () => {
+        document.getElementById('nav-links').classList.toggle('open');
+    });
+
+    // ─── SCROLL REVEAL (Intersection Observer) ─────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ─── CONTADOR ANIMADO DE MÉTRICAS ──────────────────────────────────
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.querySelectorAll('.metric-number').forEach(el => {
+                const target = +el.dataset.target;
+                const duration = 1800;
+                const step = target / (duration / 16);
+                let current = 0;
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) { current = target; clearInterval(timer); }
+                    el.textContent = Math.floor(current);
+                }, 16);
+            });
+            counterObserver.unobserve(entry.target);
+        });
+    }, { threshold: 0.3 });
+
+    const metricasSec = document.getElementById('metricas');
+    if (metricasSec) counterObserver.observe(metricasSec);
+    </script>
     
     <script>
         // Obtener el modal
